@@ -60,7 +60,7 @@ public class LiveViewGroup extends FrameLayout {
     }
 
     public void init(Context context) {
-        criticalVel = getResources().getDisplayMetrics().density * 160;
+        criticalVel = getResources().getDisplayMetrics().density * 200;
         gestureDetector = new GestureDetectorCompat(context, new YScrollDetector());
         mDragger = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
                     @Override
@@ -105,7 +105,6 @@ public class LiveViewGroup extends FrameLayout {
                                 int tmpXLeft = mInteractiveUi.getLeft() + dx;
                                 if (tmpXLeft <= mWidth) {
                                     if (left < 0) {//自己都没滑动回来
-
                                         mInteractiveUi.offsetLeftAndRight(dx);
                                     }
                                 }
@@ -158,22 +157,22 @@ public class LiveViewGroup extends FrameLayout {
                     @Override
                     public void onViewDragStateChanged(int state) {
                         super.onViewDragStateChanged(state);
-                        Log.i(TAG,"onViewDragStateChanged");
+                        Log.i(TAG, "onViewDragStateChanged");
                         switch (state) {
                             case ViewDragHelper.STATE_IDLE:
 //                                if (mInteractiveUi.getLeft() > mWidth / 2) {
-//                                    currentstate = VIEWSTATE.LIVE_VISABLE;
+//                                    currentView = CURRENT_VIEW.VIEW_TWO;
 //                                } else if (mInteractiveUi.getLeft() > 0) {
-//                                    currentstate = VIEWSTATE.INTERACTIVE_UI_VISABLE;
+//                                    currentView = CURRENT_VIEW.VIEW_THERE;
 //                                } else if (mNextLiveUi.getLeft() > -mWidth / 2) {
-//                                    currentstate = VIEWSTATE.LIVE_VISABLE;
+//                                    currentView = CURRENT_VIEW.VIEW_TWO;
 //                                } else if (mInteractiveUi.getLeft() < 0) {
-//                                    currentstate = VIEWSTATE.INTERACTIVE_UI_VISABLE;
+//                                    currentView = CURRENT_VIEW.VIEW_THERE;
 //                                    break;
 //                                } else {
-//                                    currentstate = VIEWSTATE.LIVE_VISABLE;
+//                                    currentView = CURRENT_VIEW.VIEW_TWO;
 //                                }
-//                                Log.i(TAG, "CURRENT state:" + currentstate);
+//                                Log.i(TAG, "CURRENT state:" + currentView);
 //                                break;
 
                         }
@@ -190,7 +189,7 @@ public class LiveViewGroup extends FrameLayout {
                      */
                     @Override
                     public void onViewReleased(View releasedChild, float xvel, float yvel) {
-                        Log.i(TAG,"onViewReleased");
+                        Log.i(TAG, "onViewReleased");
                         Log.w("onViewReleased", String.format("releasedChild %s,xvel %s,yvel %s", releasedChild.getTag(), xvel, yvel));
                         judgeState(xvel);
                     }
@@ -203,63 +202,61 @@ public class LiveViewGroup extends FrameLayout {
 //        if (true) {
 //            return;
 //        }
-        if (currentstate == VIEWSTATE.INTERACTIVE_UI_VISABLE) {//如果原来是 显示 互动界面的
-            if (xvel > 0) {//从右边往左边滑动     如果速度过快不需要判断位置了
-                if (Math.abs(xvel) >= criticalVel) {
+        if (mInteractiveUi.getLeft() != mWidth) {//如果原来是 显示 互动界面的
+            if (Math.abs(xvel) >= criticalVel) {
+                if (xvel > 0) {//从左往右边滑动
                     hiddenInteractiveUi();
-                    currentstate = VIEWSTATE.LIVE_VISABLE;
-                    return;
-                }
-            } else {
-                if (Math.abs(xvel) >= criticalVel) {
-                    currentstate = VIEWSTATE.INTERACTIVE_UI_VISABLE;//这句话可以不用谢
+                    currentView = CURRENT_VIEW.VIEW_TWO;
+                } else {
                     showInteractiveUi();
-                    return;
+                    currentView = CURRENT_VIEW.VIEW_THERE;
                 }
+                return;
             }
+
             if (mInteractiveUi.getLeft() < mWidth / 2) {//表明 往右边拉 还没拉到1半 所以回弹
                 showInteractiveUi();
             } else if (mInteractiveUi.getLeft() > mWidth / 2) {//表明 往右边拉 拉到1半了
+                currentView = CURRENT_VIEW.VIEW_TWO;
                 hiddenInteractiveUi();
             }
-        } else if (currentstate == VIEWSTATE.LIVE_VISABLE) {
-//            if (xvel > 0) {//从右边往左边滑动     如果速度过快不需要判断位置了
-//                if (Math.abs(xvel) >= criticalVel) {
-//                    showInteractiveUi();
-//                    currentstate = VIEWSTATE.INTERACTIVE_UI_VISABLE;//这句话可以不用谢
-//                    return;
-//                }
-//            } else {
-//                if (Math.abs(xvel) >= criticalVel) {
-//                    currentstate = VIEWSTATE.LIVE_VISABLE;
-//                    hiddenInteractiveUi();
-//                    return;
-//                }
-//            }
-            int value = mCurrentLiveUi.getLeft();
-            if (value < 0) {
-                if (mInteractiveUi.getLeft() < mWidth) {
-                    hiddenInteractiveUi();
+
+        } else if (mCurrentLiveUi.getLeft() != 0) {
+            if (Math.abs(xvel) >= criticalVel) {
+                if (xvel > 0) {//从左往右边滑动
                     showCurrentUi();
+                    currentView = CURRENT_VIEW.VIEW_TWO;
                 } else {
                     hiddenCurrentUi();
-                    showInteractiveUi();
+                    currentView = CURRENT_VIEW.VIEW_ONE;
                 }
-            } else {
-                if (value < mWidth / 2) {//表明 往右边拉 还没拉到1半 所以回弹
-                    showCurrentUi();
-                } else if (value >= mWidth / 2) {//表明 往右边拉 拉到1半了
-                    hiddenCurrentUi();
-                }
+                return;
             }
 
+            int value = mCurrentLiveUi.getLeft();
+            if (Math.abs(value) > mWidth / 2) {//说明负数很大了
+                hiddenCurrentUi();
+                currentView = CURRENT_VIEW.VIEW_ONE;
+            } else {
+                showCurrentUi();
+                currentView = CURRENT_VIEW.VIEW_TWO;
+            }
+        /*
+            value永远不可能大于0
+        解决ui问题但是现在 改变判断条件了不需要再这里做了
+         if (value == 0) {//dengyu 0
+                if (mInteractiveUi.getLeft() != mWidth) {
+                    if (mInteractiveUi.getLeft() < mWidth / 2) {
+                        hiddenInteractiveUi();
+                    } else {
+                        hiddenCurrentUi();
+                        showInteractiveUi();
+                    }
+                } else {
+                }
+            }
+            */
         }
-//            if(mInteractiveUi.getLeft()==mWidth){
-//
-//            }else{
-//                Log.i(TAG,"由于互动ui的左边");
-//                currentstate=VIEWSTATE.INTERACTIVE_UI_VISABLE;
-//            }
     }
 
     @Override
@@ -332,18 +329,18 @@ public class LiveViewGroup extends FrameLayout {
     }
 
 
-    public void showNextUi() {
-        //租后的左边和定边
-        if (mDragger.smoothSlideViewTo(mNextLiveUi, 0, 0)) {
-            ViewCompat.postInvalidateOnAnimation(this);
-        }
-    }
-
-    public void hiddenNextUi() {
-        if (mDragger.smoothSlideViewTo(mNextLiveUi, -mWidth, 0)) {
-            ViewCompat.postInvalidateOnAnimation(this);
-        }
-    }
+//    public void showNextUi() {
+//        //租后的左边和定边
+//        if (mDragger.smoothSlideViewTo(mNextLiveUi, 0, 0)) {
+//            ViewCompat.postInvalidateOnAnimation(this);
+//        }
+//    }
+//
+//    public void hiddenNextUi() {
+//        if (mDragger.smoothSlideViewTo(mNextLiveUi, -mWidth, 0)) {
+//            ViewCompat.postInvalidateOnAnimation(this);
+//        }
+//    }
 
     // 使用估值器和属性动画（nineoldAndroid）(ViewHelper)
     protected void dispatchAnimation(float percent) {
@@ -366,9 +363,59 @@ public class LiveViewGroup extends FrameLayout {
 
     }
 
-    enum VIEWSTATE {
-        LIVE_VISABLE, INTERACTIVE_UI_VISABLE, NEXT_LIVE_VISABLE;
+    /**
+     * ONE 就是 往TWO也就是没有交互的页面往右边滑动显示的界面
+     */
+    public enum CURRENT_VIEW {
+        VIEW_ONE, VIEW_TWO, VIEW_THERE;
     }
 
-    public VIEWSTATE currentstate = VIEWSTATE.INTERACTIVE_UI_VISABLE;//默认显示 交互view
+    public CURRENT_VIEW currentView = CURRENT_VIEW.VIEW_THERE;//默认显示 交互view
+
+    public void setCurrentView(CURRENT_VIEW currentView, boolean needAnim) {
+        switch (currentView) {
+            case VIEW_ONE:
+                if (needAnim) {
+                    if (mInteractiveUi.getLeft() != mWidth) {
+                        hiddenCurrentUi();
+                    } else if (mCurrentLiveUi.getLeft() != 0) {
+                        hiddenCurrentUi();
+                    }
+
+                } else {
+                    mInteractiveUi.offsetLeftAndRight(mWidth);//这里应该是负数
+                    mCurrentLiveUi.offsetLeftAndRight(mWidth);//这里应该是负数
+
+                }
+                break;
+            case VIEW_TWO:
+                if (needAnim) {
+                    if (mInteractiveUi.getLeft() != mWidth) {
+                        hiddenCurrentUi();
+                    }
+                    showCurrentUi();
+
+                } else {
+                    mInteractiveUi.offsetLeftAndRight(mWidth);//这里应该是负数
+                    mCurrentLiveUi.offsetLeftAndRight(0);//这里应该是负数
+
+                }
+                break;
+            case VIEW_THERE:
+                if (needAnim) {
+                    if (mCurrentLiveUi.getLeft() != 0) {
+                        showCurrentUi();
+                    }
+                    showInteractiveUi();
+
+                } else {
+                    mCurrentLiveUi.offsetLeftAndRight(0);//这里应该是负数
+                    mInteractiveUi.offsetLeftAndRight(mWidth);//这里应该是负数
+                }
+                break;
+            default:
+                return;
+        }
+        this.currentView = currentView;
+    }
 }
