@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="space.qssq.dragdemo.MainActivity">
+
+    <space.qssq.dragdemo.LiveViewGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#5000">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#F00"
+            android:text="我是下一个背景" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#Ff0"
+            android:text="我是直播区域" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="#0f0"
+            android:text="我是互动界面" />
+
+    </space.qssq.dragdemo.LiveViewGroup>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+    </android.support.v4.view.ViewPager>
+</LinearLayout>
