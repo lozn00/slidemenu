@@ -71,7 +71,7 @@ public class LiveViewGroup extends FrameLayout {
                     @Override
                     public int clampViewPositionHorizontal(View child, int left, int dx) {
                         //dx表示滑动的距离大于0表示右滑动  小于0 表示向左边滑动 left表示距离屏幕左边的距离
-//                        Log.i("clampViewPositionHorizontal", "left:" + left + ",dx:" + dx);
+                        Log.i("clampViewPositionHorizontal", "left:" + left + ",dx:" + dx);
                         if (child == mInteractiveUi) {//不能向左边滑动只能向右边滑动 右边滑动之后就把直播展示出来了
                             if (left < 0) {
                                 return 0;
@@ -79,7 +79,7 @@ public class LiveViewGroup extends FrameLayout {
                                 return mWidth;
                             }
                         } else if (child == mCurrentLiveUi) { //
-                            if (left < -mWidth) {//拉得太过了肯定不行
+                            if (left < 0 && left < -mWidth) {//拉得太过了肯定不行
                                 return -mWidth;
                             } else if (left > mWidth) {//往右边滑动不可超过直播的宽度  直播ui往右边拉可以，但是在下一步要撤销回去。
                                 return mWidth;
@@ -87,7 +87,7 @@ public class LiveViewGroup extends FrameLayout {
                         } else if (child == mNextLiveUi) {//自己不动 不能右边滑动 了, 另外左边滑动其实是把 直播view滑动出来
                             if (left > 0) {
                                 return 0;
-                            } else if (left < -mWidth) {//往右边滑动不可超过直播的宽度
+                            } else if (left < 0 && left < -mWidth) {//往右边滑动不可超过直播的宽度
                                 return -mWidth;
                             }
                         }
@@ -98,45 +98,21 @@ public class LiveViewGroup extends FrameLayout {
                     public void onViewPositionChanged(View changedView, int left, int top, int dx,
                                                       int dy) {
                         super.onViewPositionChanged(changedView, left, top, dx, dy);
-
-//                        Log.d("3 onViewPositionChanged", String.format("changedView %s ,left %s ,top %s ,dx %s ,dy %s", changedView.getTag(), left, top, dx, dy));
+                        Log.d("3 onViewPositionChanged", String.format("changedView %s ,left %s ,top %s ,dx %s ,dy %s", changedView.getTag(), left, top, dx, dy));
                         if (changedView == mCurrentLiveUi) {
 //                            // 验证移动的范围对不对，如果不对就啥都不做
                             if (dx < 0) {//往右边 那么左边变成复数 拉自己不动
+                                int tmpXLeft = mInteractiveUi.getLeft() + dx;
+                                if (tmpXLeft <= mWidth) {
+                                    if (left < 0) {//自己都没滑动回来
+                                        mInteractiveUi.offsetLeftAndRight(dx);
+                                    }
+                                }
                                 if (left < 0) {
-                                    if (mCurrentLiveUi.getLeft() != 0) {
-                                        mCurrentLiveUi.offsetLeftAndRight(-dx);//自己撤销回去？拉多少撤销多少 除非自己都没考左边
-                                    } else {
-                                        mCurrentLiveUi.offsetLeftAndRight(-dx);//自己撤销回去？拉多少撤销多少 除非自己都没考左边
-                                        int tmpXLeft = mInteractiveUi.getLeft() + dx;
-                                        if (tmpXLeft < mWidth && mInteractiveUi.getLeft() != mWidth) {
-                                            mInteractiveUi.offsetLeftAndRight(dx);
-                                        }
-
-                                    }
-
-
-                                } else {
-                                    int tmpXLeft = mInteractiveUi.getLeft() + dx;
-                                    if (tmpXLeft < mWidth) {
-                                        if (left < 0) {//自己都没滑动回来
-                                            mInteractiveUi.offsetLeftAndRight(dx);
-                                        }
-                                    }
-                                }
-                            } else if (dx > 0) {
-//                                   //自己还是不能往右边滑动 除非自己距离左边有距离
-                                if (mInteractiveUi.getLeft() != mWidth) {
-                                    int tmpXLeft = mInteractiveUi.getLeft() + dx;
-                                    if (tmpXLeft < mWidth) {
-                                        if (left < 0) {//自己都没滑动回来
-                                            mInteractiveUi.offsetLeftAndRight(dx);
-                                        }
-                                    }
-                                    mCurrentLiveUi.offsetLeftAndRight(-dx);//自己撤销回去？拉多少撤销多少 除非自己都没考左边
-                                } else if (mCurrentLiveUi.getLeft() > 0) {
                                     mCurrentLiveUi.offsetLeftAndRight(-dx);//自己撤销回去？拉多少撤销多少 除非自己都没考左边
                                 }
+                            } else {
+//
                             }
                         } else if (changedView == mNextLiveUi) {
                             int tmpXLeft = mCurrentLiveUi.getLeft() + dx;
@@ -144,7 +120,7 @@ public class LiveViewGroup extends FrameLayout {
                                 if (tmpXLeft > 0) {
                                     mCurrentLiveUi.offsetLeftAndRight(dx);//这里应该是负数
                                 }
-                            } else if (dx < 0) {
+                            } else {
                                 if (tmpXLeft <= mWidth) {
                                     mCurrentLiveUi.offsetLeftAndRight(dx);//这里应该是正数
                                 }
@@ -297,7 +273,6 @@ public class LiveViewGroup extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        Log.i(TAG, "onFinishInflate");
         mNextLiveUi = getChildAt(0);
 
         mCurrentLiveUi = getChildAt(1);
@@ -322,31 +297,23 @@ public class LiveViewGroup extends FrameLayout {
         if (mDragger.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
         } else {
-            if (onPageChangeListener != null)
-                if (mInteractiveUi.getLeft() == 0) {
-                    onPageChangeListener.onPageNext();
-                } else if (mCurrentLiveUi.getLeft() == mWidth) {
-                    onPageChangeListener.onPagePre();
-                } else {
-                    onPageChangeListener.onPageCurrent();
+            if (mDragger.continueSettling(true)) {
+                ViewCompat.postInvalidateOnAnimation(this);
+            } else {
+                if (onPageChangeListener != null) {
+
+                    if (mInteractiveUi.getLeft() == 0) {
+                        onPageChangeListener.onPageNext();
+                    } else if (mCurrentLiveUi.getLeft() == mWidth) {
+                        onPageChangeListener.onPagePre();
+                    } else {
+                        onPageChangeListener.onPageCurrent();
+                    }
+                    Log.i(TAG, "执行完毕");
                 }
-            Log.i(TAG, "执行完毕");
+            }
         }
     }
-
-    public interface onPageChangeListener {
-        public void onPageNext();
-
-        public void onPagePre();
-
-        public void onPageCurrent();
-    }
-
-    public void setOnPageChangeListener(LiveViewGroup.onPageChangeListener onPageChangeListener) {
-        this.onPageChangeListener = onPageChangeListener;
-    }
-
-    onPageChangeListener onPageChangeListener = null;
 
 
     public void showInteractiveUi() {
@@ -367,6 +334,21 @@ public class LiveViewGroup extends FrameLayout {
         if (mDragger.smoothSlideViewTo(mCurrentLiveUi, 0, 0)) {
             ViewCompat.postInvalidateOnAnimation(this);
         }
+    }
+
+
+    public void setOnPageChangeListener(LiveViewGroup.onPageChangeListener onPageChangeListener) {
+        this.onPageChangeListener = onPageChangeListener;
+    }
+
+    onPageChangeListener onPageChangeListener = null;
+
+    public interface onPageChangeListener {
+        public void onPageNext();
+
+        public void onPagePre();
+
+        public void onPageCurrent();
     }
 
     public void hiddenCurrentUi() {
@@ -456,8 +438,8 @@ public class LiveViewGroup extends FrameLayout {
                     showInteractiveUi();
 
                 } else {
-                    mCurrentLiveUi.offsetLeftAndRight(0);
-                    mInteractiveUi.offsetLeftAndRight(0);
+                    mCurrentLiveUi.offsetLeftAndRight(0);//这里应该是负数
+                    mInteractiveUi.offsetLeftAndRight(mWidth);//这里应该是负数
                 }
                 break;
             default:

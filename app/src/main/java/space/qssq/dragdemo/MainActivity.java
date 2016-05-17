@@ -19,6 +19,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         liveViewGroup = (LiveViewGroup) findViewById(R.id.liveView);
+        liveViewGroup.setOnPageChangeListener(new LiveViewGroup.onPageChangeListener() {
+            @Override
+            public void onPageNext() {
+                liveViewGroup.setCurrentView(LiveViewGroup.CURRENT_VIEW.VIEW_TWO, false);
+            }
+
+            @Override
+            public void onPagePre() {
+                liveViewGroup.setCurrentView(LiveViewGroup.CURRENT_VIEW.VIEW_TWO, false);
+            }
+
+            @Override
+            public void onPageCurrent() {
+
+            }
+        });
         findViewById(R.id.tv1).setOnClickListener(this);
         findViewById(R.id.tv2).setOnClickListener(this);
         findViewById(R.id.tv3).setOnClickListener(this);
@@ -59,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             realPosition = half % mViewList.size();
         }
         Log.i(TAG, "real position:" + realPosition + ",position:" + half);
-        mViewPager.setCurrentItem(0);
+//        mViewPager.setCurrentItem(half);
     }
 
     @Override
