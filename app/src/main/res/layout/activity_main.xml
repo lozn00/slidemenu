@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="space.qssq.dragdemo.MainActivity">
-
-    <space.qssq.dragdemo.LiveViewGroup
+    <!--实现方法1  合并-->
+    <space.qssq.dragdemo.LoopVerticalHorizontalPager
         android:id="@+id/liveView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,49 +16,53 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="#F00"
-            android:text="我是下一个背景" />
+            android:text="我是背景图层" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="#Ff0"
-            android:text="我是直播区域" />
+            android:text="我是上一个封面或者下一个封面" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="#0f0"
-            android:text="我是互动界面" />
+            android:text="我是互动" />
 
-    </space.qssq.dragdemo.LiveViewGroup>
-
+    </space.qssq.dragdemo.LoopVerticalHorizontalPager>
+    <!--实现方法2  分离-->
     <space.qssq.dragdemo.VerticalLPager
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <space.qssq.dragdemo.LoopHorizontalPager
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#5000">
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="match_parent"
                 android:background="#Fff"
                 android:text="" />
 
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#0f0"
+                android:layout_height="match_parent"
+                android:background="#5ff0"
                 android:text="" />
         </space.qssq.dragdemo.LoopHorizontalPager>
+        <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#0f0"-->
+        <!--android:text="" />-->
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#f00" />
+            android:background="#5f00" />
     </space.qssq.dragdemo.VerticalLPager>
 
     <!--<space.qssq.dragdemo.VerticalLPager-->

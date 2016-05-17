@@ -19,7 +19,7 @@ import android.widget.FrameLayout;
  */
 public class LoopHorizontalPager extends FrameLayout {
 
-    private static final String TAG = "TwoPager";
+    private static final String TAG = "LoopHorizontalPager";
     private float criticalVel;
     private ViewDragHelper mDragger;
     private View mViewBg;
@@ -40,10 +40,20 @@ public class LoopHorizontalPager extends FrameLayout {
     public LoopHorizontalPager(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
+
     }
+//
+//    class YScrollDetector extends GestureDetector.SimpleOnGestureListener {
+//        @Override
+//        public boolean onScroll(MotionEvent e1, MotionEvent e2, float dx, float dy) {
+//            return true;
+////            return Math.abs(dy) <= Math.abs(dx);
+//        }
+//    }
 
     public void init(Context context) {
         criticalVel = getResources().getDisplayMetrics().density * 120;
+//        gestureDetector = new GestureDetectorCompat(context, new YScrollDetector());
         mDragger = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
                     @Override
                     public boolean tryCaptureView(View child, int pointerId) {
@@ -178,8 +188,11 @@ public class LoopHorizontalPager extends FrameLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         if (mDragger.shouldInterceptTouchEvent(event)) {
+            Log.i(TAG, "onInterceptTouchEvent 已收到");
             return true;
         } else {
+            Log.i(TAG, "垂直方向 不进行拦截");
+            getParent().requestDisallowInterceptTouchEvent(false);
             return super.onInterceptTouchEvent(event);
         }
 
