@@ -93,6 +93,22 @@ public class LoopHorizontalPager extends FrameLayout {
                     }
 
                     @Override
+                    public int getViewVerticalDragRange(View child) {
+//                        return super.getViewVerticalDragRange(child);
+                        return 0;
+                    }
+
+                    @Override
+                    public int getViewHorizontalDragRange(View child) {
+                        Log.i(TAG, "getViewHorizontalDragRange:" + child.getClass().getSimpleName());
+                        return 0;
+//                        if (child instanceof VerticalLPager) {
+//                            return 0;
+//                        }
+//                        return super.getViewHorizontalDragRange(child);
+                    }
+
+                    @Override
                     public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
                         super.onViewPositionChanged(changedView, left, top, dx, dy);
                         lastDx = dx;
@@ -188,19 +204,59 @@ public class LoopHorizontalPager extends FrameLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         if (mDragger.shouldInterceptTouchEvent(event)) {
-            Log.i(TAG, "onInterceptTouchEvent 已收到");
             return true;
-        } else {
-            Log.i(TAG, "垂直方向 不进行拦截");
-            getParent().requestDisallowInterceptTouchEvent(false);
-            return super.onInterceptTouchEvent(event);
         }
+//            Log.i(TAG, "onInterceptTouchEvent 已收到");
+        return allowVerticalScroll(event);
+//            return super.onInterceptTouchEvent(event);
+//            return super.onInterceptTouchEvent(event);
 
     }
+
+
+    public boolean allowVerticalScroll(MotionEvent event) {
+        boolean intercepted = false;
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (mDragger.continueSettling(true)) {//自己这边的动画都没处理完毕肯定自还是交给自己处理咯!
+                    mDragger.shouldInterceptTouchEvent(event);
+                    intercepted = true;
+                } else {
+                    intercepted = false;
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                int deltaX = x - mLastX;
+                int deltaY = y - mLastY;
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {//水平滑动
+                    //自己就是水平的拦截
+                    mDragger.shouldInterceptTouchEvent(event);
+                    intercepted = true;
+                } else {
+                    intercepted = false;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                intercepted = false;
+                break;
+            default:
+                break;
+        }
+        Log.i(TAG, "是否进行拦截:" + intercepted + ",x:" + x + ",y:" + y);
+        mLastX = x;
+        mLastY = y;
+        return intercepted;
+    }
+
+    public int mLastX;
+    public int mLastY;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         mDragger.processTouchEvent(event);
+        Log.i(TAG, "onTouchEvent" + mDragger.getViewDragState());
         return true;
     }
 

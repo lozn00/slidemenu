@@ -179,69 +179,50 @@ public class VerticalLPager extends FrameLayout {
             return true;
         } else {
             Log.i(TAG, "onInterceptTouchEvent 交给子类处理了.并没有拦截");
-            return showuldGiveChild(event);
+            return allowVerticalScroll(event);
         }
 
     }
-    /**
-     * http://my.oschina.net/fengheju/blog/196608
-     *
-     * @return
-     */
-    float downX = 0;
-    float downY = 0;
-    float x = 0;
-    float y = 0;
 
-    public boolean showuldGiveChild(MotionEvent ev) {
-        final int action = ev.getActionMasked();
-        if (BuildConfig.DEBUG)
-            Log.d("onInterceptTouchEvent", "action: " + action);
-
-        if (action == MotionEvent.ACTION_DOWN && ev.getEdgeFlags() != 0) {
-            // 该事件可能不是我们的
-            return false;
-        }
-        boolean isIntercept = false;
-
-        switch (action) {
+    public boolean allowVerticalScroll(MotionEvent event) {
+        boolean intercepted = false;
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                // 将会需要这些初始信息（因为我们的onTouchEvent将可能接收不到ACTION_DOWN事件）
-                downX = x = ev.getX();
-                downY = y = ev.getY();
+//                if (mDragger.continueSettling(true)) {//自己这边的动画都没处理完毕肯定自还是交给自己处理咯!
+//                    intercepted = true;
+//                } else {
+                intercepted = false;
+//                }
+//                getParent().requestDisallowInterceptTouchEvent(true);//不允许父亲拦截
                 break;
             case MotionEvent.ACTION_MOVE:
-                float mx = ev.getX();
-                float my = ev.getY();
-                if (BuildConfig.DEBUG) {
-                    Log.d("onInterceptTouchEvent", "action_move [touchSlop: ");
-                }
-                // 根据方向进行拦截，（其实这样，如果我们的方向是水平的，里面有一个ScrollView，那么我们是支持嵌套的）
-                // we get a move event for ourself
-                float distanceX = Math.abs(mx - x);
-                float distanceY = Math.abs(my - y);
-                if (distanceY > distanceX) {
-                    isIntercept = true;
+                int deltaX = x - mLastX;
+                int deltaY = y - mLastY;
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {//水平滑动
+                    intercepted = false;
+//                    getParent().requestDisallowInterceptTouchEvent(false);//交给父亲处理
                 } else {
-                    isIntercept = false;
+                    //自己就是垂直的
+                    intercepted = true;
                 }
-                Log.i(TAG, "x距离" + distanceX + "y距离:" + distanceY);
-                //如果不拦截的话，我们不会更新位置，这样可以通过累积小的移动距离来判断是否达到可以认为是Move的阈值。
-                //这里当产生拦截的话，会更新位置（这样相当于损失了mTouchSlop的移动距离，如果不更新，可能会有一点点跳的感觉）
-                if (isIntercept) {
-                    x = mx;
-                    y = my;
-                }
+                Log.i(TAG, "deltaX:" + deltaX + ",dy:" + deltaY);
                 break;
-            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                // 这是触摸的最后一个事件，无论如何都不会拦截
-                isIntercept = false;
+                intercepted = false;
+                break;
+            default:
                 break;
         }
-        return isIntercept;
+        Log.i(TAG, "是否进行拦截:" + intercepted + ",x:" + x + ",y:" + y);
+        mLastX = x;
+        mLastY = y;
+        return intercepted;
     }
 
+    public int mLastX;
+    public int mLastY;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
