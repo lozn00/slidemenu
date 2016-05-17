@@ -183,7 +183,6 @@ public class VerticalLPager extends FrameLayout {
         }
 
     }
-
     /**
      * http://my.oschina.net/fengheju/blog/196608
      *

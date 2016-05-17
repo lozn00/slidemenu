@@ -16,7 +16,7 @@ import android.widget.FrameLayout;
  * 默认显示2个封面
  * 把封面往右边拖将会隐藏 隐藏之后往左边面拉又会被拉出来
  * 逻辑写了好多 貌似写完了花了 1小时 ，但是昨天那个花的时间太多了
- * <p>
+ * <p/>
  * 从下往上滑动 又需要处理另外一个问题。。
  */
 public class LoopVerticalHorizontalPager extends FrameLayout {
@@ -25,11 +25,11 @@ public class LoopVerticalHorizontalPager extends FrameLayout {
     private float criticalVel;
     private ViewDragHelper mDragger;
     /**
-     * 最底层的view
+     * 最底层的view  滑动出去后被看见的图层
      */
     private View mViewBg;
     /**
-     * 左右滑动的上一页和下一页
+     * 左右滑动的上一页和下一页 其实它才是背景
      */
     private View mPreNextView;
     /**
@@ -291,7 +291,6 @@ public class LoopVerticalHorizontalPager extends FrameLayout {
             @Override
             public void run() {
                 mWidth = getWidth();
-        mPreNextView.offsetLeftAndRight(mWidth);
                 mHeight = getHeight();
 
             }
@@ -317,7 +316,7 @@ public class LoopVerticalHorizontalPager extends FrameLayout {
                     onPageChangeListener.onPageNext();
                 }
             } else if (mPreNextView.getLeft() == -mWidth) {
-                mPreNextView.offsetLeftAndRight(mWidth);//移动回去 左  屏幕 左边-宽度 移动回来
+//                mPreNextView.offsetLeftAndRight(mWidth);//移动回去 左  屏幕 左边-宽度 移动回来
                 if (onPageChangeListener != null) {
                     onPageChangeListener.onPagePre();
                 }
@@ -337,7 +336,7 @@ public class LoopVerticalHorizontalPager extends FrameLayout {
     }
 
     public void resetByNext() {
-        mPreNextView.offsetLeftAndRight(mWidth);
+        mPreNextView.offsetLeftAndRight(-mWidth);
     }
 
     public void resetByPre() {

@@ -7,63 +7,82 @@
     tools:context="space.qssq.dragdemo.MainActivity">
     <!--实现方法1  合并-->
     <space.qssq.dragdemo.LoopVerticalHorizontalPager
-        android:id="@+id/liveView"
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#5000">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="#F00"
-            android:text="我是背景图层" />
+            android:layout_height="match_parent"
+            android:background="#F00" />
 
-        <TextView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="#Ff0"
-            android:text="我是上一个封面或者下一个封面" />
+            android:layout_height="match_parent"
+            android:background="#Fff">
 
-        <TextView
+            <ListView
+                android:id="@+id/listview"
+                android:layout_width="100dp"
+                android:layout_height="100dp"></ListView>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/bg" />
+
+        </FrameLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="#0f0"
-            android:text="我是互动" />
+            android:layout_height="match_parent"
+            android:background="#8fff"
+            android:visibility="gone">
+
+            <ListView
+                android:id="@+id/listview1"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="80dp"></ListView>
+
+        </LinearLayout>
 
     </space.qssq.dragdemo.LoopVerticalHorizontalPager>
     <!--实现方法2  分离-->
-    <space.qssq.dragdemo.VerticalLPager
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<space.qssq.dragdemo.VerticalLPager-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
-        <space.qssq.dragdemo.LoopHorizontalPager
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <!--<space.qssq.dragdemo.LoopHorizontalPager-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#Fff"
-                android:text="" />
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="#Fff"-->
+    <!--android:text="" />-->
 
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#5ff0"
-                android:text="" />
-        </space.qssq.dragdemo.LoopHorizontalPager>
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="#0f0"-->
-        <!--android:text="" />-->
+    <!--<TextView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="#5ff0"-->
+    <!--android:text="" />-->
+    <!--</space.qssq.dragdemo.LoopHorizontalPager>-->
+    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:background="#0f0"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:text="" />&ndash;&gt;-->
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#5f00" />
-    </space.qssq.dragdemo.VerticalLPager>
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:background="#5f00" />-->
+    <!--</space.qssq.dragdemo.VerticalLPager>-->
 
     <!--<space.qssq.dragdemo.VerticalLPager-->
     <!--android:layout_width="match_parent"-->
@@ -80,38 +99,38 @@
     <!--android:background="#f00" />-->
     <!--</space.qssq.dragdemo.VerticalLPager>-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="horizontal">-->
 
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="展示下一个图片" />
+    <!--<TextView-->
+    <!--android:id="@+id/tv1"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="展示下一个图片" />-->
 
-        <TextView
-            android:id="@+id/tv2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="展示直播无交互" />
+    <!--<TextView-->
+    <!--android:id="@+id/tv2"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="展示直播无交互" />-->
 
-        <TextView
-            android:id="@+id/tv3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="展示交互界面" />
-    </LinearLayout>
+    <!--<TextView-->
+    <!--android:id="@+id/tv3"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_weight="1"-->
+    <!--android:text="展示交互界面" />-->
+    <!--</LinearLayout>-->
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <!--<android.support.v4.view.ViewPager-->
+    <!--android:id="@+id/viewpager"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
 
 
-    </android.support.v4.view.ViewPager>
+    <!--</android.support.v4.view.ViewPager>-->
 </LinearLayout>
