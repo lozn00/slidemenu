@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <space.qssq.dragdemo.VerticalLPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#0094ff">
+
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#5000">
+
+            <ListView
+                android:id="@+id/listview"
+                android:layout_width="60dp"
+                android:layout_height="100dp"
+                android:layout_marginRight="20dp"></ListView>
+        </FrameLayout>
+    </space.qssq.dragdemo.VerticalLPager>
+</LinearLayout>

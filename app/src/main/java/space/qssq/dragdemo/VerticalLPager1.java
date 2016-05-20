@@ -7,6 +7,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -16,7 +17,7 @@ import android.widget.FrameLayout;
  * 默认显示2个封面
  * 把封面往下面拖将会隐藏 隐藏之后往上面拉又会被拉出来
  */
-public class VerticalLPager extends FrameLayout {
+public class VerticalLPager1 extends FrameLayout {
 
     private static final String TAG = "VerticalLPager";
     private float criticalVel;
@@ -25,19 +26,20 @@ public class VerticalLPager extends FrameLayout {
     private View mCoverView;
     private int mSize;
     private int mPointerId;
+    private GestureDetector gestureDetector;
 
-    public VerticalLPager(Context context) {
+    public VerticalLPager1(Context context) {
         super(context);
         init(context);
     }
 
-    public VerticalLPager(Context context, AttributeSet attrs) {
+    public VerticalLPager1(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public VerticalLPager(Context context, AttributeSet attrs, int defStyleAttr) {
+    public VerticalLPager1(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
@@ -53,49 +55,46 @@ public class VerticalLPager extends FrameLayout {
 
     public void init(Context context) {
         criticalVel = getResources().getDisplayMetrics().density * 120;
-//        gestureDetector = new GestureDetector(getContext(), new GestureDetector.OnGestureListener() {
-//            @Override
-//            public boolean onDown(MotionEvent e) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onShowPress(MotionEvent e) {
-//
-//            }
-//
-//            @Override
-//            public boolean onSingleTapUp(MotionEvent e) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onLongPress(MotionEvent e) {
-//
-//            }
-//
-//            @Override
-//            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//                return false;
-//            }
-//        });
+        gestureDetector = new GestureDetector(getContext(), new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                return false;
+            }
+        });
         criticalVel = getResources().getDisplayMetrics().density * 200;
         mDragger = ViewDragHelper.create(this, 1.0f, new ViewDragHelper.Callback() {
                     @Override
                     public boolean tryCaptureView(View child, int pointerId) {
-                        Log.i(TAG, "tryCaptureView:" + child.getClass().getSimpleName());
-//                        =DRAG_STATE.DRAGING;
                         return true;
                     }
 
                     @Override
                     public int clampViewPositionHorizontal(View child, int left, int dx) {
-                        Log.i(TAG, "clampViewPositionHorizontal:" + child.getClass().getSimpleName());
                         return 0;
                     }
 
@@ -104,7 +103,6 @@ public class VerticalLPager extends FrameLayout {
                     public int clampViewPositionVertical(View child, int top, int dy) {
                         Log.i(TAG, "clampViewPositionVertical->" + top + "," + dy);
                         if (child == mCoverView) {//不能向左边滑动只能向右边滑动 右边滑动之后就把直播展示出来了
-
                             if (top < 0) {
                                 return 0;
                             } else if (top > mSize) {//往右边滑动不可超过直播的宽度
@@ -127,46 +125,34 @@ public class VerticalLPager extends FrameLayout {
                     @Override
                     public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
                         super.onViewPositionChanged(changedView, left, top, dx, dy);
-                        Log.d(TAG, " changedView.getClass().getSimpleName()" + String.format("changedView " + changedView.getClass().getSimpleName() + " ,left %s ,top %s ,dx %s ,dy %s", changedView.getTag(), left, top, dx, dy));
                         if (changedView == mViewBg) {
                             mViewBg.offsetTopAndBottom(-dy);//自己撤销回去
                             int top1 = mCoverView.getTop();
-                            int tmpXTop = top1 + dy;
-                            if (tmpXTop < mSize) {
+                            int tmpXTop = top1 +dy;
+                            if (tmpXTop <= mSize) {
                                 mCoverView.offsetTopAndBottom(dy);
-                                Log.i(TAG, "mCoverView.offsetTopAndBottom:" + dy);
                             }
                         } else {
 
                         }
+                        Log.d("3 onViewPositionChanged", String.format("changedView " + changedView + " ,left %s ,top %s ,dx %s ,dy %s", changedView.getTag(), left, top, dx, dy));
                     }
 
                     @Override
                     public void onViewDragStateChanged(int state) {
                         super.onViewDragStateChanged(state);
 
-                        Log.i(TAG, "onViewDragStateChanged" + state);
+                        Log.i(TAG, "onViewDragStateChanged");
                         switch (state) {
                             case ViewDragHelper.STATE_IDLE:
                                 Log.i(TAG, "STATE_IDLE");
-                            case ViewDragHelper.STATE_SETTLING:
-                                Log.i(TAG, "STATE_SETTLING");
-                                if (onPageChangeListener != null) {
-                                    if (mCoverView.getTop() == 0) {
-                                        onPageChangeListener.onShow();
-                                    } else {
-                                        onPageChangeListener.onHidden();
-                                    }
-                                }
-                                //稍微的点击都会出发state_draging，另外发现写在computeScroll 的false不准确 所以移动到这里来
-                                break;
 
                         }
                     }
 
                     @Override
                     public void onViewReleased(View releasedChild, float xvel, float yvel) {
-                        Log.w(TAG, "onViewReleased" + ",TOP:" + mCoverView.getTop() + "," + releasedChild.getClass().getSimpleName() + "" + String.format("releasedChild %s,xvel %s,yvel %s", releasedChild.getTag(), xvel, yvel));
+                        Log.w("onViewReleased", String.format("releasedChild %s,xvel %s,yvel %s", releasedChild.getTag(), xvel, yvel));
                         if (Math.abs(yvel) >= criticalVel) {
                             if (yvel > 0) {//从上到下惯性滑动速度
                                 hidden();
@@ -220,13 +206,7 @@ public class VerticalLPager extends FrameLayout {
                 if (Math.abs(deltaX) > Math.abs(deltaY)) {//水平滑动
                     intercepted = false;
 //                    getParent().requestDisallowInterceptTouchEvent(false);//交给父亲处理
-                }
-//                else if (Math.abs(DensityUtil.px2dip(getContext(), deltaX)) < 5 && Math.abs(DensityUtil.px2dip(getContext(), deltaY)) < 5) {
-//                    //点击事件
-//                    Log.i(TAG, "小距离的滑动不进行拦截");
-//                    intercepted = false;
-//                }
-                else {
+                } else {
                     //自己就是垂直的
                     intercepted = true;
                 }
@@ -274,62 +254,26 @@ public class VerticalLPager extends FrameLayout {
      */
     @Override
     public void computeScroll() {
+
         if (mDragger.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
+        } else {
+            Log.i(TAG, "执行完毕");
         }
-      /*  else {
-
-            Log.i(TAG, "滑动未必完毕");
-        }*/
     }
 
 
     public void show() {
-        Log.i(TAG, "show");
         //租后的左边和定边
         if (mDragger.smoothSlideViewTo(mCoverView, 0, 0)) {
             ViewCompat.postInvalidateOnAnimation(this);
-        } else {
-            if (onPageChangeListener != null) {
-                onPageChangeListener.onShow();
-            }
         }
     }
 
     public void hidden() {
-        Log.i(TAG, "hidden");
         if (mDragger.smoothSlideViewTo(mCoverView, 0, mSize)) {
             ViewCompat.postInvalidateOnAnimation(this);
-        } else {
-            if (onPageChangeListener != null) {
-                onPageChangeListener.onHidden();
-            }
         }
     }
 
-    public interface OnPageChangeListener {
-        void onShow();
-
-        void onHidden();
-    }
-
-    public void setOnPageChangeListener(OnPageChangeListener onPageChangeListener) {
-        this.onPageChangeListener = onPageChangeListener;
-    }
-
-    public boolean isShow() {
-        return mCoverView.getTop() < mSize;
-    }
-
-    OnPageChangeListener onPageChangeListener = null;
-
-    enum SHOW_STATE {
-        STATE_OPEN, STATE_CLOSE
-    }
-
-    enum DRAG_STATE {
-        DRAGING, WAIT_DRAG
-    }
-
-    DRAG_STATE dragstate = DRAG_STATE.WAIT_DRAG;
 }
