@@ -295,8 +295,21 @@ public class LoopHorizontalPager extends FrameLayout {
             Log.i(TAG, "执行完毕" + mCoverView.getLeft());
         }
     }
-
-
+    /**
+     * false表示 自己处理    孩子 然后就像递归一样如果 shiviewgroup那么
+     *
+     * @param ev
+     * @return
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        boolean result = false;
+        if (onInterceptTouchEvent(ev)) {
+            result = onTouchEvent(ev);
+        } else {
+        }
+        return result;
+    }
     public void show() {
         //租后的左边和定边
         if (mDragger.smoothSlideViewTo(mCoverView, 0, 0)) {

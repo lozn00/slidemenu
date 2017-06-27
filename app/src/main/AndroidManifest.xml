@@ -17,6 +17,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TestVerticalPageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".TestHorzontalPageActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".VerticalSrollConfictActivity" />
+        <activity android:name=".HorzontalSrollConfictActivity" />
+        <activity android:name=".VerticalSrollNestedVerticalConfictActivity" />
+        <activity android:name=".HorzontalSrollNestedHorzontalConfictActivity"></activity>
     </application>
 
 </manifest>

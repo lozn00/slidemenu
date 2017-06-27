@@ -1,14 +1,16 @@
 package space.qssq.dragdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "MainActivity";
     //    private ViewPager mViewPager;
@@ -20,6 +22,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ListView listView = (ListView) findViewById(R.id.listview);
+        findViewById(R.id.btn_vertical_scroll).setOnClickListener(this);
+        findViewById(R.id.btn_horzontal_scroll).setOnClickListener(this);
+        findViewById(R.id.btn_horzontall_scoll_confict).setOnClickListener(this);
+        findViewById(R.id.btn_horzontal_scoll_horzontal_confict).setOnClickListener(this);
+        findViewById(R.id.btn_vertical_scoll_confict).setOnClickListener(this);
+        findViewById(R.id.btn_vertical_scoll_vertical_confict).setOnClickListener(this);
         ArrayList<String> strings = new ArrayList<>();
         strings.add("Nihao");
         strings.add("Nihao");
@@ -140,4 +148,35 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     boolean value = false;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_vertical_scroll:
+                Intent intent=new Intent(this,TestVerticalPageActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_horzontal_scroll:
+                 intent=new Intent(this,TestHorzontalPageActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_horzontall_scoll_confict:
+                 intent=new Intent(this,HorzontalSrollConfictActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_horzontal_scoll_horzontal_confict:
+                 intent=new Intent(this,HorzontalSrollNestedHorzontalConfictActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.btn_vertical_scoll_confict:
+                intent=new Intent(this,VerticalSrollConfictActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.btn_vertical_scoll_vertical_confict:
+                intent=new Intent(this,VerticalSrollNestedVerticalConfictActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 }

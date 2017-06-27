@@ -74,6 +74,18 @@ public class HorizontalPager extends FrameLayout {
                         return 0;
                     }
 
+                        //写上垂直和水平 可以解决不能响应点击事件问题
+                        @Override
+                        public int getViewHorizontalDragRange(View child)
+                        {
+                            return getMeasuredWidth()-child.getMeasuredWidth();
+                        }
+
+                        @Override
+                        public int getViewVerticalDragRange(View child)
+                        {
+                            return getMeasuredHeight()-child.getMeasuredHeight();
+                        }
 
                     @Override
                     public int clampViewPositionVertical(View child, int top, int dy) {

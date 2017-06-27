@@ -96,8 +96,21 @@ public class VerticalLPager extends FrameLayout {
                         return 0;
                     }
 
+                    //写上垂直和水平 可以解决不能响应点击事件问题
+                    @Override
+                    public int getViewHorizontalDragRange(View child)
+                    {
+                        return getMeasuredWidth()-child.getMeasuredWidth();
+                    }
 
                     @Override
+                    public int getViewVerticalDragRange(View child)
+                    {
+                        return getMeasuredHeight()-child.getMeasuredHeight();
+                    }
+
+
+            @Override
                     public int clampViewPositionVertical(View child, int top, int dy) {
                         Log.i(TAG, "clampViewPositionVertical->" + top + "," + dy);
                         if (child == mCoverView) {//不能向左边滑动只能向右边滑动 右边滑动之后就把直播展示出来了
@@ -167,6 +180,8 @@ public class VerticalLPager extends FrameLayout {
                         }
 
                     }
+
+
                 }
 
         );

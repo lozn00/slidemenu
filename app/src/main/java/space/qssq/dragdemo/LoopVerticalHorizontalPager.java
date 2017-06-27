@@ -72,6 +72,19 @@ public class LoopVerticalHorizontalPager extends FrameLayout {
                         return true;
                     }
 
+                    //写上垂直和水平 可以解决不能响应点击事件问题
+                    @Override
+                    public int getViewHorizontalDragRange(View child)
+                    {
+                        return getMeasuredWidth()-child.getMeasuredWidth();
+                    }
+
+                    @Override
+                    public int getViewVerticalDragRange(View child)
+                    {
+                        return getMeasuredHeight()-child.getMeasuredHeight();
+                    }
+
                     @Override
                     public int clampViewPositionHorizontal(View child, int left, int dx) {
                         if (currentDragState == DRAG_STATE.STOP) {
