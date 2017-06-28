@@ -24,10 +24,12 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
     private float criticalVel;
     private ViewDragHelper mDragger;
     private View mViewBg;
-    private View mCoverView;
+    private View mTopView;
     private int mSize;
     private int mPointerId;
     private NestedScrollingParentHelper parentHelper;
+    private float downX;
+    private float downY;
 
     public VerticalLPager(Context context) {
         super(context);
@@ -196,6 +198,17 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
                     public boolean tryCaptureView(View child, int pointerId) {
                         Log.i(TAG, "tryCaptureView:" + child.getClass().getSimpleName());
 //                        =DRAG_STATE.DRAGING;
+                        boolean enableTopScroll = ViewUtils.canChildScrollDown(child);//是否能往上拉 也就是往上滚动
+                        boolean enableDownScroll = ViewUtils.canChildScrollUp(child);//是否能往下滚动 为毛是反的
+                        boolean isclose=mSize==mTopView.getTop();
+
+                        Log.w(TAG,"手是否能往上滚动,"+enableTopScroll+",手是否能往下滚动"+enableDownScroll+","+mTopView.getTop()+",顶部举例"+",isclose:"+isclose+",size "+mSize+", top:"+mTopView.getTop());
+                        if(!enableTopScroll){
+                            //
+
+                        }
+
+
                         return true;
                     }
 
@@ -222,7 +235,7 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
             @Override
                     public int clampViewPositionVertical(View child, int top, int dy) {
                         Log.i(TAG, "clampViewPositionVertical->" + top + "," + dy);
-                        if (child == mCoverView) {//不能向左边滑动只能向右边滑动 右边滑动之后就把直播展示出来了
+                        if (child == mTopView) {//不能向左边滑动只能向右边滑动 右边滑动之后就把直播展示出来了
 
                             if (top < 0) {
                                 return 0;
@@ -249,11 +262,11 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
                         Log.d(TAG, " changedView.getClass().getSimpleName()" + String.format("changedView " + changedView.getClass().getSimpleName() + " ,left %s ,top %s ,dx %s ,dy %s", changedView.getTag(), left, top, dx, dy));
                         if (changedView == mViewBg) {
                             mViewBg.offsetTopAndBottom(-dy);//自己撤销回去
-                            int top1 = mCoverView.getTop();
+                            int top1 = mTopView.getTop();
                             int tmpXTop = top1 + dy;
                             if (tmpXTop < mSize) {
-                                mCoverView.offsetTopAndBottom(dy);
-                                Log.i(TAG, "mCoverView.offsetTopAndBottom:" + dy);
+                                mTopView.offsetTopAndBottom(dy);
+                                Log.i(TAG, "mTopView.offsetTopAndBottom:" + dy);
                             }
                         } else {
 
@@ -271,7 +284,7 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
                             case ViewDragHelper.STATE_SETTLING:
                                 Log.i(TAG, "STATE_SETTLING");
                                 if (onPageChangeListener != null) {
-                                    if (mCoverView.getTop() == 0) {
+                                    if (mTopView.getTop() == 0) {
                                         onPageChangeListener.onShow();
                                     } else {
                                         onPageChangeListener.onHidden();
@@ -285,7 +298,7 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
 
                     @Override
                     public void onViewReleased(View releasedChild, float xvel, float yvel) {
-                        Log.w(TAG, "onViewReleased" + ",TOP:" + mCoverView.getTop() + "," + releasedChild.getClass().getSimpleName() + "" + String.format("releasedChild %s,xvel %s,yvel %s", releasedChild.getTag(), xvel, yvel));
+                        Log.w(TAG, "onViewReleased" + ",TOP:" + mTopView.getTop() + "," + releasedChild.getClass().getSimpleName() + "" + String.format("releasedChild %s,xvel %s,yvel %s", releasedChild.getTag(), xvel, yvel));
                         if (Math.abs(yvel) >= criticalVel) {
                             if (yvel > 0) {//从上到下惯性滑动速度
                                 hidden();
@@ -296,7 +309,7 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
                             }
                         }
 
-                        if (mCoverView.getTop() < mSize / 2) {//表明 往右边拉 还没拉到1半 所以回弹
+                        if (mTopView.getTop() < mSize / 2) {//表明 往右边拉 还没拉到1半 所以回弹
                             show();
                         } else {
                             hidden();
@@ -311,9 +324,35 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (mDragger.shouldInterceptTouchEvent(event)) {
+/*        boolean onInterceptTouchEvent = super.onInterceptTouchEvent(event);
+        Log.w(TAG,"onInterceptTouchEvent:"+onInterceptTouchEvent);
+        return onInterceptTouchEvent;*/
+
+
+     if (mDragger.shouldInterceptTouchEvent(event)) {
             Log.i(TAG, "拦截了,");
-            return true;
+
+         switch (event.getAction()){
+             case MotionEvent.ACTION_DOWN:
+                 downX =event.getX();
+                 downY =event.getY();
+            return false;
+             case MotionEvent.ACTION_MOVE:
+                 float moveX =event.getX();
+               float  moveY =event.getY();
+                    float detalY=downY-moveY;
+                    if(downY<moveY)//越是0越大{
+                    {
+                        Log.w(TAG,"往下滑动"+detalY+",downY"+downY+",moveY:"+moveY);
+                    }else{
+
+                        Log.w(TAG,"往上滑动"+detalY+",downY"+downY+",moveY:"+moveY);
+                    }
+                 downX =moveX;
+                 downY =moveY;
+                 break;
+         }
+         return true;
         } else {
             Log.i(TAG, "onInterceptTouchEvent 交给子类处理了.并没有拦截");
 //            return allowVerticalScroll(event);
@@ -321,6 +360,9 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
         }
 
     }
+
+
+
 
     public boolean allowVerticalScroll(MotionEvent event) {
         boolean intercepted = false;
@@ -370,6 +412,18 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        Log.w(TAG,"onTouchEvent");
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                Log.w(TAG,"onTouchEvent   move down");
+                break;
+            case MotionEvent.ACTION_MOVE:
+                Log.w(TAG, "onTouchEvent  move move ");
+                break;
+            case MotionEvent.ACTION_UP:
+                Log.w(TAG,"onTouchEvent  move up");
+                break;
+        }
         mDragger.processTouchEvent(event);
         return true;
     }
@@ -378,7 +432,7 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
     protected void onFinishInflate() {
         super.onFinishInflate();
         mViewBg = getChildAt(0);
-        mCoverView = getChildAt(1);
+        mTopView = getChildAt(1);
         post(new Runnable() {
             @Override
             public void run() {
@@ -397,9 +451,14 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
     public void computeScroll() {
         if (mDragger.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
+//            Log.w(TAG,"还没滑动完毕scrollY:"+ mTopView.getScrollY());
+        }else{
+//            Log.w(TAG,"滑动完毕了scrollY:"+ mTopView.getScrollY());
+
         }
       /*  else {
 
+            Log.w(TAG,"还没滑动完毕 scrollY:"+mTopView.getScrollY());
             Log.i(TAG, "滑动未必完毕");
         }*/
     }
@@ -408,7 +467,7 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
     public void show() {
         Log.i(TAG, "show");
         //租后的左边和定边
-        if (mDragger.smoothSlideViewTo(mCoverView, 0, 0)) {
+        if (mDragger.smoothSlideViewTo(mTopView, 0, 0)) {
             ViewCompat.postInvalidateOnAnimation(this);
         } else {
             if (onPageChangeListener != null) {
@@ -419,7 +478,7 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
 
     public void hidden() {
         Log.i(TAG, "hidden");
-        if (mDragger.smoothSlideViewTo(mCoverView, 0, mSize)) {
+        if (mDragger.smoothSlideViewTo(mTopView, 0, mSize)) {
             ViewCompat.postInvalidateOnAnimation(this);
         } else {
             if (onPageChangeListener != null) {
@@ -439,7 +498,7 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
     }
 
     public boolean isShow() {
-        return mCoverView.getTop() < mSize;
+        return mTopView.getTop() < mSize;
     }
 
     OnPageChangeListener onPageChangeListener = null;

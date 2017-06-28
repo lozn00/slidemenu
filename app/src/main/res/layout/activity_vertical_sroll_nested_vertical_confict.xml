@@ -3,31 +3,53 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <space.qssq.dragdemo.VerticalLPager
+        android:background="#ff00"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <FrameLayout
-            android:background="#f00"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ImageView
+                android:background="@drawable/girl1"
+
+                android:tag="最底層view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                    />
+            </ImageView>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@android:color/white"
-                android:text="我是封面"
+                android:layout_height="wrap_content"
 
-                android:layout_height="wrap_content" />
+                android:textColor="@android:color/white"
+                android:text="我是背景层"/>
+
+
         </FrameLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:background="#fff"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
+        <FrameLayout
+            android:background="#55ff0000"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_marginTop="30dp"
+                android:background="#ffffff"
+                android:layout_marginBottom="30dp"
+                android:layout_gravity="bottom"
+
+                android:tag="recyclerview"
+                android:layout_width="150dp"
+                android:layout_height="230dp">
+
+
+            </android.support.v7.widget.RecyclerView>
+        </FrameLayout>
 
     </space.qssq.dragdemo.VerticalLPager>
 </LinearLayout>
