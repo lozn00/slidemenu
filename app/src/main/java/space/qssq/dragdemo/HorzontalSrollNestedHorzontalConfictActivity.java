@@ -10,6 +10,7 @@ public class HorzontalSrollNestedHorzontalConfictActivity extends AppCompatActiv
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_horzontal_sroll_nested_horzontal_confict);
-        AutoUtils.initTestHorzontalData((RecyclerView) findViewById(R.id.recycler_view));
+        AutoUtils.initTestHorzontalData((RecyclerView) findViewById(R.id.recycler_view_horzontal));
+        AutoUtils.initTestVerticalData((RecyclerView) findViewById(R.id.recycler_view_vertical));
     }
 }

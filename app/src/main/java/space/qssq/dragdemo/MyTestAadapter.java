@@ -2,7 +2,9 @@ package space.qssq.dragdemo;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -16,19 +18,25 @@ public class MyTestAadapter extends RecyclerView.Adapter<TestViewHolder> {
     public MyTestAadapter() {
         int count=50;
         for (int i = 0; i < count; i++) {
-        strings.add("測試數據"+i);
+        strings.add("测试数据"+i);
 
         }
     }
 
     @Override
     public TestViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new TestViewHolder(LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1,parent,false));
+        return new TestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_text,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(TestViewHolder holder, int position) {
-                holder.textView.setText("你好世界!"+strings.get(position));
+    public void onBindViewHolder(TestViewHolder holder, final int position) {
+                holder.textView.setText(""+strings.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "你点击了"+strings.get(position), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

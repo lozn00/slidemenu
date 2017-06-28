@@ -2,32 +2,70 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <space.qssq.dragdemo.HorizontalPager
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#ff00">
+
         <FrameLayout
-            android:background="#f00"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+
+                android:layout_height="match_parent"
+                android:background="@drawable/girl1"
+                android:tag="最底層view">
+
+                /></ImageView>
+
             <TextView
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@android:color/white"
-                android:text="我是封面"
 
-                android:layout_height="wrap_content" />
+                android:text="我是背景层"
+                android:textColor="@android:color/white" />
+
+
         </FrameLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp"
-            android:id="@+id/recycler_view"
-            android:background="#fff"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#55ff0000">
 
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_horzontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|right"
+                android:layout_marginBottom="30dp"
+
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="30dp"
+                android:tag="recyclerview">
+
+
+            </android.support.v7.widget.RecyclerView>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="230dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="30dp"
+
+                android:layout_marginTop="30dp"
+                android:background="#ffffff"
+                android:tag="recyclerview">
+
+
+            </android.support.v7.widget.RecyclerView>
+        </FrameLayout>
 
     </space.qssq.dragdemo.HorizontalPager>
 </LinearLayout>
