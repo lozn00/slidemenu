@@ -4,9 +4,9 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="space.qssq.dragdemo.MainActivity">
+              tools:context="cn.qssq666.swipemenu.test.activity.MainActivity">
     <!--实现方法1  合并-->
-    <space.qssq.dragdemo.LoopVerticalHorizontalPager
+    <cn.qssq666.swipemenu.LoopVerticalHorizontalPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -49,7 +49,7 @@
 
         </LinearLayout>
 
-    </space.qssq.dragdemo.LoopVerticalHorizontalPager>
+    </cn.qssq666.swipemenu.LoopVerticalHorizontalPager>
     <!--实现方法2  分离-->
     <!--<space.qssq.dragdemo.VerticalLPager-->
     <!--android:layout_width="match_parent"-->
@@ -133,7 +133,7 @@
 
 
     <!--</android.support.v4.view.ViewPager>-->
-    <space.qssq.dragdemo.LoopHorizontalPager
+    <cn.qssq666.swipemenu.LoopHorizontalPager
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -142,7 +142,7 @@
             android:layout_height="match_parent"
             android:background="#f00"/>
 
-        <space.qssq.dragdemo.VerticalLPager
+        <cn.qssq666.swipemenu.VerticalLPager
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -158,6 +158,6 @@
                 android:background="#5000"
                 android:gravity="center"
                 android:text="你好世界"/>
-        </space.qssq.dragdemo.VerticalLPager>
-    </space.qssq.dragdemo.LoopHorizontalPager>
+        </cn.qssq666.dragdemo.VerticalLPager>
+    </cn.qssq666.swipemenu.LoopHorizontalPager>
 </LinearLayout>

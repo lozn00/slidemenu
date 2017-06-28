@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="space.qssq.dragdemo">
+    package="cn.qssq666.swipemenu">
 
     <application
         android:allowBackup="true"
@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="cn.qssq666.swipemenu.test.activity.MainActivity"
 
             android:screenOrientation="portrait">
             <intent-filter>
@@ -19,15 +19,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TestVerticalPageActivity"
+            android:name="cn.qssq666.swipemenu.test.activity.TestVerticalPageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".TestHorzontalPageActivity"
+            android:name="cn.qssq666.swipemenu.test.activity.TestHorzontalPageActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".VerticalSrollConfictActivity"     android:screenOrientation="portrait" />
-        <activity android:name=".HorzontalSrollConfictActivity"     android:screenOrientation="portrait" />
-        <activity android:name=".VerticalSrollNestedVerticalConfictActivity"      android:screenOrientation="portrait"/>
-        <activity android:name=".HorzontalSrollNestedHorzontalConfictActivity"     android:screenOrientation="portrait"></activity>
+        <activity android:name="cn.qssq666.swipemenu.test.activity.VerticalSrollConfictActivity"     android:screenOrientation="portrait" />
+        <activity android:name="cn.qssq666.swipemenu.test.activity.HorzontalSrollConfictActivity"     android:screenOrientation="portrait" />
+        <activity android:name="cn.qssq666.swipemenu.test.activity.VerticalSrollNestedVerticalConfictActivity"      android:screenOrientation="portrait"/>
+        <activity android:name="cn.qssq666.swipemenu.test.activity.HorzontalSrollNestedHorzontalConfictActivity"     android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        applicationId "space.qssq.dragdemo"
+        applicationId "cn.qssq666.swipemenu"
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
