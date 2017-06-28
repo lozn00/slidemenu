@@ -14,7 +14,7 @@
         android:layout_centerInParent="true"
         android:orientation="vertical">
         <!--android:background="@drawable/loading_02"-->
-        <cn.qssq666.swipemenu.AnimImageView
+        <cn.qssq666.slidemenu.AnimImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center"

@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <cn.qssq666.swipemenu.HorizontalPager
+    <cn.qssq666.slidemenu.HorizontalPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ff00">
@@ -67,5 +67,5 @@
             </android.support.v7.widget.RecyclerView>
         </FrameLayout>
 
-    </cn.qssq666.swipemenu.HorizontalPager>
+    </cn.qssq666.slidemenu.HorizontalPager>
 </LinearLayout>
