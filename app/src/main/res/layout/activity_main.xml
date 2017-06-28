@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="space.qssq.dragdemo.MainActivity">
+              tools:context="cn.qssq666.swipemenu.test.activity.MainActivity">
     <!--实现方法1  合并-->
     <TextView
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:background="@android:color/black"
         android:textColor="@android:color/white"
         android:layout_height="wrap_content" />
-    <space.qssq.dragdemo.LoopVerticalHorizontalPager
+    <cn.qssq666.swipemenu.LoopVerticalHorizontalPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -64,10 +64,10 @@
 
         </LinearLayout>
 
-    </space.qssq.dragdemo.LoopVerticalHorizontalPager>
+    </cn.qssq666.swipemenu.LoopVerticalHorizontalPager>
 
 
-    <space.qssq.dragdemo.VerticalLPager
+    <cn.qssq666.swipemenu.VerticalLPager
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -130,5 +130,5 @@
 
         </android.support.v7.widget.GridLayout>
 
-    </space.qssq.dragdemo.VerticalLPager>
+    </cn.qssq666.swipemenu.VerticalLPager>
 </LinearLayout>
