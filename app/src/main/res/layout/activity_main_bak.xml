@@ -158,6 +158,6 @@
                 android:background="#5000"
                 android:gravity="center"
                 android:text="你好世界"/>
-        </cn.qssq666.dragdemo.VerticalLPager>
+        </cn.qssq666.swipemenu.VerticalLPager>
     </cn.qssq666.swipemenu.LoopHorizontalPager>
 </LinearLayout>
