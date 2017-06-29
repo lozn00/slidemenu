@@ -15,6 +15,7 @@ public class VerticalSrollNestedVerticalConfictActivity extends AppCompatActivit
         setContentView(R.layout.activity_vertical_sroll_nested_vertical_confict);
         AutoUtils.initTestVerticalData((RecyclerView) findViewById(R.id.recycler_view));
         AutoUtils.initTestHorzontalData((RecyclerView) findViewById(R.id.recycler_view_horzontal));
+        AutoUtils.initTestVerticalData((RecyclerView) findViewById(R.id.recycler_view_vertical_top));
     }
 
 }

@@ -13,14 +13,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import java.util.Arrays;
+
 import cn.qssq666.slidemenu.test.utils.ViewUtils;
 
 /**
  * Created by luozheng on 2016/5/17.  qssq.space
  * 默认显示2个封面
  * 把封面往下面拖将会隐藏 隐藏之后往上面拉又会被拉出来
+ * 模块 onStartNestedScroll  垂直滑动 就允许  onNestedPreScroll 在往屏幕上y方向滑动 滑动的距离 一定是正数
  */
-public class VerticalLPager extends FrameLayout  implements NestedScrollingParent{
+public class VerticalLPager extends FrameLayout implements NestedScrollingParent {
 
     private static final String TAG = "VerticalLPager";
     private float criticalVel;
@@ -49,10 +52,6 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
         init(context);
     }
 
-    @Override
-    public void onNestedScroll(View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
-        super.onNestedScroll(target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
-    }
 
     /*
 
@@ -77,9 +76,226 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
      */
     @Override
     public void onNestedPreScroll(View target, int dx, int dy, int[] consumed) {
-        Log.w(TAG,"onNestedPreScroll dx "+dx+", dy:"+dy+",consumed:");
-        super.onNestedPreScroll(target, dx, dy, consumed);
+//        super.onNestedPreScroll(target, dx, dy, consumed);
+        Log.w(TAG, "测试模块能否往上滑动，可以就不动，" + ViewUtils.canChildScrollDown(target) + ",能否往下滑動" + ViewUtils.canChildScrollUp(target));
+        if (dy > 0) {
+            //往上滑动
+            if (mTopView.getTop() > 0) {
+
+                if (!ViewUtils.canChildScrollDown(target)) {//此view自己不能往上滑动了就 可以让自己滑动。
+                    mTopView.offsetTopAndBottom(-dy);
+
+                }
+            }
+        } else {
+            if (mTopView.getTop() < mSize) {
+
+                if (!ViewUtils.canChildScrollUp(target)) {//此view自己不能往下滑动了就 可以让自己滑动。
+                    mTopView.offsetTopAndBottom(Math.abs(dy));
+
+                }
+            }
+        }
+
+    /*    // 应该移动的Y距离
+        final float shouldMoveY = getY() + dy;
+
+        // 获取到父View的容器的引用，这里假定父View容器是View
+        final View parent = (View) getParent();
+
+        int consumedY;
+        // 如果超过了父View的上边界，只消费子View到父View上边的距离
+        if (shouldMoveY <= 0) {
+//            consumedY = - (int) getY();
+            consumedY = (int) (getY()-target.getY());//往上滑動
+
+
+
+        } else if (shouldMoveY >= parent.getHeight() - getHeight()) {
+            // 如果超过了父View的下边界，只消费子View到父View
+//            consumedY = (int) (parent.getHeight() - getHeight() - getY());
+            consumedY = dy;
+        } else {
+            // 其他情况下全部消费
+            consumedY = dy;
+        }
+*/
+        // 对父View进行移动
+
+
+        // 将父View消费掉的放入consumed数组中
+//        consumed[1] = consumedY;
+
+        Log.d(TAG, String.format("测试模块 onNestedPreScroll, dx = %d, dy = %d, consumed = %s,  topview y=%f", dx, dy, Arrays.toString(consumed), mTopView.getY()));
+
     }
+
+
+    /**
+     * React to a nested scroll in progress.
+     * <p>
+     * <p>This method will be called when the ViewParent's current nested scrolling child view
+     * dispatches a nested scroll event. To receive calls to this method the ViewParent must have
+     * previously returned <code>true</code> for a call to
+     * {@link #onStartNestedScroll(View, View, int)}.</p>
+     * <p>
+     * <p>Both the consumed and unconsumed portions of the scroll distance are reported to the
+     * ViewParent. An implementation may choose to use the consumed portion to match or chase scroll
+     * position of multiple child elements, for example. The unconsumed portion may be used to
+     * allow continuous dragging of multiple scrolling or draggable elements, such as scrolling
+     * a list within a vertical drawer where the drawer begins dragging once the edge of inner
+     * scrolling content is reached.</p>
+     *
+     * @param target       The descendent view controlling the nested scroll
+     * @param dxConsumed   Horizontal scroll distance in pixels already consumed by target
+     * @param dyConsumed   Vertical scroll distance in pixels already consumed by target
+     * @param dxUnconsumed Horizontal scroll distance in pixels not consumed by target
+     * @param dyUnconsumed Vertical scroll distance in pixels not consumed by target
+     */
+    public void onNestedScroll(View target, int dxConsumed, int dyConsumed,
+                               int dxUnconsumed, int dyUnconsumed) {
+
+        Log.w(TAG, String.format("测试模块 onNestedScroll当嵌套滑动之后, dxConsumed =%d  dyConsumed =%d  dxUncomsumed =%d  dyUnconsumed =%d", dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed));
+
+    }
+
+    /**
+     * React to a descendant view initiating a nestable scroll operation, claiming the
+     * nested scroll operation if appropriate.
+     * <p>
+     * <p>This method will be called in response to a descendant view invoking
+     * {@link ViewCompat#startNestedScroll(View, int)}. Each parent up the view hierarchy will be
+     * given an opportunity to respond and claim the nested scrolling operation by returning
+     * <code>true</code>.</p>
+     * <p>
+     * <p>This method may be overridden by ViewParent implementations to indicate when the view
+     * is willing to support a nested scrolling operation that is about to begin. If it returns
+     * true, this ViewParent will become the target view's nested scrolling parent for the duration
+     * of the scroll operation in progress. When the nested scroll is finished this ViewParent
+     * will receive a call to {@link #onStopNestedScroll(View)}.
+     * </p>
+     *
+     * @param child            Direct child of this ViewParent containing target
+     * @param target           View that initiated the nested scroll
+     * @param nestedScrollAxes Flags consisting of {@link ViewCompat#SCROLL_AXIS_HORIZONTAL},
+     *                         {@link ViewCompat#SCROLL_AXIS_VERTICAL} or both
+     * @return true if this ViewParent accepts the nested scroll operation
+     */
+    public boolean onStartNestedScroll(View child, View target, int nestedScrollAxes) {
+        Log.w(TAG, String.format("测试模块 onStartNestedScroll  %s", nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL ? "垂直滑动" : "水平滑动"));
+        return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL;//是否需要嵌套嵌套滾動
+    }
+
+    /**
+     * React to the successful claiming of a nested scroll operation.
+     * <p>
+     * <p>This method will be called after
+     * {@link #onStartNestedScroll(View, View, int) onStartNestedScroll} returns true. It offers
+     * an opportunity for the view and its superclasses to perform initial configuration
+     * for the nested scroll. Implementations of this method should always call their superclass's
+     * implementation of this method if one is present.</p>
+     *
+     * @param child            Direct child of this ViewParent containing target
+     * @param target           View that initiated the nested scroll
+     * @param nestedScrollAxes Flags consisting of {@link ViewCompat#SCROLL_AXIS_HORIZONTAL},
+     *                         {@link ViewCompat#SCROLL_AXIS_VERTICAL} or both
+     * @see #onStartNestedScroll(View, View, int)
+     * @see #onStopNestedScroll(View)
+     */
+    public void onNestedScrollAccepted(View child, View target, int nestedScrollAxes) {
+        Log.w(TAG, "测试模块 onNestedScrollAccepted");
+        parentHelper.onNestedScrollAccepted(child, target, nestedScrollAxes);
+    }
+
+    /**
+     * React to a nested scroll operation ending.
+     * <p>
+     * <p>Perform cleanup after a nested scrolling operation.
+     * This method will be called when a nested scroll stops, for example when a nested touch
+     * scroll ends with a {@link MotionEvent#ACTION_UP} or {@link MotionEvent#ACTION_CANCEL} event.
+     * Implementations of this method should always call their superclass's implementation of this
+     * method if one is present.</p>
+     *
+     * @param target View that initiated the nested scroll
+     */
+    public void onStopNestedScroll(View target) {
+        Log.w(TAG, "测试模块 onStopNestedScroll");
+        if(!mDragger.continueSettling(true)){//没有在滑动中才进行调用。
+            if (mTopView.getTop() < mSize / 2) {//表明 往右边拉 还没拉到1半 所以回弹
+                show();
+            } else {
+                hidden();
+            }
+        }
+        parentHelper.onStopNestedScroll(target);
+    }
+
+
+    /**
+     * Request a fling from a nested scroll.
+     * <p>
+     * <p>This method signifies that a nested scrolling child has detected suitable conditions
+     * for a fling. Generally this means that a touch scroll has ended with a
+     * along a scrollable axis.</p>
+     * <p>
+     * <p>If a nested scrolling child view would normally fling but it is at the edge of
+     * its own content, it can use this method to delegate the fling to its nested scrolling
+     * parent instead. The parent may optionally consume the fling or observe a child fling.</p>
+     *
+     * @param target    View that initiated the nested scroll
+     * @param velocityX Horizontal velocity in pixels per second
+     * @param velocityY Vertical velocity in pixels per second
+     * @param consumed  true if the child consumed the fling, false otherwise
+     * @return true if this parent consumed or otherwise reacted to the fling
+     */
+    public boolean onNestedFling(View target, float velocityX, float velocityY, boolean consumed) {
+        return true;
+    }
+
+    /**
+     * React to a nested fling before the target view consumes it.
+     * <p>
+     * <p>This method siginfies that a nested scrolling child has detected a fling with the given
+     * velocity along each axis. Generally this means that a touch scroll has ended with a
+     * along a scrollable axis.</p>
+     * <p>
+     * <p>If a nested scrolling parent is consuming motion as part of a
+     * {@link #onNestedPreScroll(View, int, int, int[]) pre-scroll}, it may be appropriate for
+     * it to also consume the pre-fling to complete that same motion. By returning
+     * <code>true</code> from this method, the parent indicates that the child should not
+     * fling its own internal content as well.</p>
+     *
+     * @param target    View that initiated the nested scroll
+     * @param velocityX Horizontal velocity in pixels per second
+     * @param velocityY Vertical velocity in pixels per second
+     * @return true if this parent consumed the fling ahead of the target view
+     */
+    public boolean onNestedPreFling(View target, float velocityX, float velocityY) {//不返回正负 所以 要变通一下
+        Log.w(TAG, String.format("测试模块 velocityY =%f ", velocityY));
+        if (velocityY >= criticalVel) {
+            if (mTopView.getTop() < mSize / 2) {//表明 往右边拉 还没拉到1半 所以回弹
+                show();
+            } else {
+                hidden();
+            }
+        }
+
+
+        return false;
+    }
+
+    /**
+     * Return the current axes of nested scrolling for this NestedScrollingParent.
+     *
+     * <p>A NestedScrollingParent returning something other than {@link ViewCompat#SCROLL_AXIS_NONE}
+     * is currently acting as a nested scrolling parent for one or more descendant views in
+     * the hierarchy.</p>
+     *
+     * @return Flags indicating the current axes of nested scrolling
+     * @see ViewCompat#SCROLL_AXIS_HORIZONTAL
+     * @see ViewCompat#SCROLL_AXIS_VERTICAL
+     * @see ViewCompat#SCROLL_AXIS_NONE
+     */
     /**
      请求从嵌套滚动抛出。
      *
@@ -132,24 +348,24 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
      */
 
     /**
-     *返回当前轴嵌套滚动这nestedscrollingparent。
-     *
+     * 返回当前轴嵌套滚动这nestedscrollingparent。
+     * <p>
      * <BR>一nestedscrollingparent返回其他东西{@链接viewcompat # scroll_axis_none }
-     *当前作为一个或多个后代视图的嵌套滚动母函数。
-     *层次结构。
+     * 当前作为一个或多个后代视图的嵌套滚动母函数。
+     * 层次结构。
+     * <p>
+     * 表示当前嵌套滚动轴的返回标志
+     * “看viewcompat # scroll_axis_horizontal
+     * “看viewcompat # scroll_axis_vertical
+     * “看viewcompat # scroll_axis_none
      *
-     *表示当前嵌套滚动轴的返回标志
-     *“看viewcompat # scroll_axis_horizontal
-     *“看viewcompat # scroll_axis_vertical
-     *“看viewcompat # scroll_axis_none
      * @see ViewCompat#SCROLL_AXIS_HORIZONTAL
      * @see ViewCompat#SCROLL_AXIS_VERTICAL
      * @see ViewCompat#SCROLL_AXIS_NONE
      */
-    public int getNestedScrollAxes(){
+    public int getNestedScrollAxes() {
         return parentHelper.getNestedScrollAxes();
     }
-
 
 
     //    class YScrollDetector extends GestureDetector.SimpleOnGestureListener {
@@ -202,10 +418,10 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
 //                        =DRAG_STATE.DRAGING;
                         boolean enableTopScroll = ViewUtils.canChildScrollDown(child);//是否能往上拉 也就是往上滚动
                         boolean enableDownScroll = ViewUtils.canChildScrollUp(child);//是否能往下滚动 为毛是反的
-                        boolean isclose=mSize==mTopView.getTop();
+                        boolean isclose = mSize == mTopView.getTop();
 
-                        Log.w(TAG,"手是否能往上滚动,"+enableTopScroll+",手是否能往下滚动"+enableDownScroll+","+mTopView.getTop()+",顶部举例"+",isclose:"+isclose+",size "+mSize+", top:"+mTopView.getTop());
-                        if(!enableTopScroll){
+                        Log.w(TAG, "手是否能往上滚动," + enableTopScroll + ",手是否能往下滚动" + enableDownScroll + "," + mTopView.getTop() + ",顶部举例" + ",isclose:" + isclose + ",size " + mSize + ", top:" + mTopView.getTop());
+                        if (!enableTopScroll) {
                             //
 
                         }
@@ -222,19 +438,17 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
 
                     //写上垂直和水平 可以解决不能响应点击事件问题
                     @Override
-                    public int getViewHorizontalDragRange(View child)
-                    {
-                        return getMeasuredWidth()-child.getMeasuredWidth();
+                    public int getViewHorizontalDragRange(View child) {
+                        return getMeasuredWidth() - child.getMeasuredWidth();
                     }
 
                     @Override
-                    public int getViewVerticalDragRange(View child)
-                    {
-                        return getMeasuredHeight()-child.getMeasuredHeight();
+                    public int getViewVerticalDragRange(View child) {
+                        return getMeasuredHeight() - child.getMeasuredHeight();
                     }
 
 
-            @Override
+                    @Override
                     public int clampViewPositionVertical(View child, int top, int dy) {
                         Log.i(TAG, "clampViewPositionVertical->" + top + "," + dy);
                         if (child == mTopView) {//不能向左边滑动只能向右边滑动 右边滑动之后就把直播展示出来了
@@ -331,30 +545,30 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
         return onInterceptTouchEvent;*/
 
 
-     if (mDragger.shouldInterceptTouchEvent(event)) {
+        if (mDragger.shouldInterceptTouchEvent(event)) {
             Log.i(TAG, "拦截了,");
 
-         switch (event.getAction()){
-             case MotionEvent.ACTION_DOWN:
-                 downX =event.getX();
-                 downY =event.getY();
-            return false;
-             case MotionEvent.ACTION_MOVE:
-                 float moveX =event.getX();
-               float  moveY =event.getY();
-                    float detalY=downY-moveY;
-                    if(downY<moveY)//越是0越大{
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    downX = event.getX();
+                    downY = event.getY();
+                    return false;
+                case MotionEvent.ACTION_MOVE:
+                    float moveX = event.getX();
+                    float moveY = event.getY();
+                    float detalY = downY - moveY;
+                    if (downY < moveY)//越是0越大{
                     {
-                        Log.w(TAG,"往下滑动"+detalY+",downY"+downY+",moveY:"+moveY);
-                    }else{
+                        Log.w(TAG, "往下滑动" + detalY + ",downY" + downY + ",moveY:" + moveY);
+                    } else {
 
-                        Log.w(TAG,"往上滑动"+detalY+",downY"+downY+",moveY:"+moveY);
+                        Log.w(TAG, "往上滑动" + detalY + ",downY" + downY + ",moveY:" + moveY);
                     }
-                 downX =moveX;
-                 downY =moveY;
-                 break;
-         }
-         return true;
+                    downX = moveX;
+                    downY = moveY;
+                    break;
+            }
+            return true;
         } else {
             Log.i(TAG, "onInterceptTouchEvent 交给子类处理了.并没有拦截");
 //            return allowVerticalScroll(event);
@@ -362,8 +576,6 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
         }
 
     }
-
-
 
 
     public boolean allowVerticalScroll(MotionEvent event) {
@@ -414,16 +626,16 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.w(TAG,"onTouchEvent");
-        switch (event.getAction()){
+        Log.w(TAG, "onTouchEvent");
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Log.w(TAG,"onTouchEvent   move down");
+                Log.w(TAG, "onTouchEvent   move down");
                 break;
             case MotionEvent.ACTION_MOVE:
                 Log.w(TAG, "onTouchEvent  move move ");
                 break;
             case MotionEvent.ACTION_UP:
-                Log.w(TAG,"onTouchEvent  move up");
+                Log.w(TAG, "onTouchEvent  move up");
                 break;
         }
         mDragger.processTouchEvent(event);
@@ -454,7 +666,7 @@ public class VerticalLPager extends FrameLayout  implements NestedScrollingParen
         if (mDragger.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
 //            Log.w(TAG,"还没滑动完毕scrollY:"+ mTopView.getScrollY());
-        }else{
+        } else {
 //            Log.w(TAG,"滑动完毕了scrollY:"+ mTopView.getScrollY());
 
         }

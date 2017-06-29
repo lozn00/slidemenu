@@ -16,28 +16,28 @@ import cn.qssq666.slidemenu.test.viewholder.TestViewHolder;
  */
 
 public class MyTestAadapter extends RecyclerView.Adapter<TestViewHolder> {
-        ArrayList<String> strings=new ArrayList<>();
+    ArrayList<String> strings = new ArrayList<>();
 
     public MyTestAadapter() {
-        int count=50;
+        int count = 10;
         for (int i = 0; i < count; i++) {
-        strings.add("测试数据"+i);
+            strings.add("测试数据" + i);
 
         }
     }
 
     @Override
     public TestViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new TestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_text,parent,false));
+        return new TestViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.view_item_text, parent, false));
     }
 
     @Override
     public void onBindViewHolder(TestViewHolder holder, final int position) {
-                holder.textView.setText(""+strings.get(position));
+        holder.textView.setText("" + strings.get(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "你点击了"+strings.get(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "你点击了" + strings.get(position), Toast.LENGTH_SHORT).show();
             }
         });
 
