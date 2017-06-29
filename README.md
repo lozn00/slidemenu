@@ -1,35 +1,45 @@
 
 
-![演示图片地址no](https://github.com/qssq/giftanim/blob/master/Pictures/xxxxxanim.gif)
+![演示图片地址no](https://github.com/qssq/slidemenu/blob/master/Pictures/1.gif)
 
 **功能**
 
 支持水平 垂直滑动翻页 
 水平垂直嵌套不冲突，响应点击事件 支持嵌套recyclerview
 
+
+支持嵌套不需要松手的平滑滑动 和加速度  ，触摸在recyclerview,当recyclerview不可以滑动的时候 那么 见证奇迹的时候到了 ，该 menu滑动了。
+
+**激情**
+
+一直没有研究触摸，搁置了很久，现在发现逃避问题不是办法的，遇到变态的需求还是求大神，然而大神都是不鸟我的，那么还是自己造轮子了。
+我想解决一切基于NestedScrollingParent NestedScrollingChild的控件 ，这样可以适配各种控件的触摸冲突，而且用起来见到直接套进去就好了。
+
 **原理**
 
 第一个-view为 视频区域 第二个 为菜单区域。滑动的是第二个view.第一个view始终在原来的位置。
 使用方法简单 直接嵌套起来使用就行了。
+利用嵌套滑动解决 触摸recyclerview无法滑动
 
 
 **存在的问题**
 
-
-  如果嵌套了全屏的recyclerview作为菜单那么事件肯定全部给recyclerview了， 那么 菜单也就失去了作用了，事件问题 还请牛人改进，我暂时还在学习中，我会的时候再解决更牛逼的需求 ，recyclerview不能滑动了再让菜单继续滑动。*
-
-**疑点**
+目前verticalPage是已经完美了的，至于菜单关闭还是没关闭的功能还在做，另外水平的也是 。
+目前支持嵌套不需要松手的平滑滑动 和加速度  ，触摸在recyclerview,当recyclerview不可以滑动的时候 那么 见证奇迹的时候到了 ，该 menu滑动了。
 
 
-本demo还包含了ios加载进度控件 和 循环翻页的东西
+**疑问**
+
+
+本demo还包含了ios加载进度控件 和 循环翻页的东西  
 
 循环翻页的没有加上demo，可以自己测试使用，貌似也没什么大问题 。
 我有空加上。
 
 
-**QQ**
+**共同学习 共同进步**
 
-694886526 http://qssq666.cn
+QQ 694886526 http://qssq666.cn
 #
 
 
