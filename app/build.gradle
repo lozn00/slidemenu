@@ -2,14 +2,17 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
-        applicationId "cn.qssq666.slidemenu"
-        minSdkVersion 14
+        applicationId "cn.qssq666.slidemenutest"
+        minSdkVersion 11
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+    }
+    lintOptions {
+        abortOnError false
     }
     buildTypes {
         release {
@@ -24,8 +27,7 @@ dependencies {
     compile files('libs/nineoldandroids-2.4.0.jar')
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support:gridlayout-v7:25.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.1'
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:recyclerview-v7:25.+'
-    compile project(':isoprogressbar')
+    compile project(':mylibrary')
 }

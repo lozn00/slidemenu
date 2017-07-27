@@ -1,48 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              tools:context="cn.qssq666.slidemenu.test.activity.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <!--实现方法1  合并-->
     <TextView
         android:layout_width="match_parent"
-        android:text="这是一个垂直水平翻页并解决冲突的demo by qssq"
+        android:layout_height="wrap_content"
         android:background="@android:color/black"
-        android:textColor="@android:color/white"
-        android:layout_height="wrap_content" />
+        android:text="这是一个垂直水平翻页并解决冲突的demo by qssq"
+        android:textColor="@android:color/white" />
+
     <cn.qssq666.slidemenu.LoopVerticalHorizontalPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="#5000">
+        android:layout_height="150dp">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#ff3333">
+
             <TextView
-                android:text="我是hongse "
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#F00"/>
+                style="@style/text_size_bg_tip"
+                android:text="LoopVerticalHorizontalPager第一层 " />
         </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#Fff">
+            android:background="#333333">
+
+            <TextView
+                style="@style/text_size_bg_tip"
+
+                android:layout_marginTop="30dp"
+                android:text="LoopVerticalHorizontalPager第二层 " />
 
             <ListView
                 android:id="@+id/listview"
+                android:background="@color/colorAccent"
                 android:layout_width="100dp"
                 android:layout_height="100dp"></ListView>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                />
+                android:scaleType="centerCrop" />
 
         </FrameLayout>
 
@@ -57,78 +62,102 @@
                 android:layout_width="200dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="80dp"></ListView>
+
             <TextView
                 android:layout_width="wrap_content"
-                android:text="我是第三層"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="我是第三層" />
 
         </LinearLayout>
 
     </cn.qssq666.slidemenu.LoopVerticalHorizontalPager>
 
 
-    <cn.qssq666.slidemenu.VerticalLPager
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <View
+        <cn.qssq666.slidemenu.VerticalLPager
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#0f0" />
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ccff0000">
+
+                <TextView
+                    style="@style/text_size_bg_tip"
+                    android:text="VerticalLPager第一层" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#000000">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="VerticalLPager第二层"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <android.support.v7.widget.GridLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
 
 
-        <android.support.v7.widget.GridLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginRight="30dp"
-            android:background="#ccff0000"
+                    app:alignmentMode="alignBounds"
+                    app:columnCount="2">
 
-            app:alignmentMode="alignBounds"
-            app:columnCount="2">
+                    <Button
+                        android:id="@+id/btn_vertical_scroll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="垂直滚动" />
 
-            <Button
-                android:id="@+id/btn_vertical_scroll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="垂直滚动" />
+                    <Button
+                        android:id="@+id/btn_horzontal_scroll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="水平滚动" />
 
-            <Button
-                android:id="@+id/btn_horzontal_scroll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="水平滚动" />
+                    <Button
 
-            <Button
+                        android:id="@+id/btn_vertical_scoll_confict"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="垂直嵌套水平" />
 
-                android:id="@+id/btn_vertical_scoll_confict"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="垂直嵌套水平" />
+                    <Button
 
-            <Button
+                        android:id="@+id/btn_horzontall_scoll_confict"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="水平嵌套垂直" />
 
-                android:id="@+id/btn_horzontall_scoll_confict"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="水平嵌套垂直" />
+                    <Button
 
-            <Button
+                        android:id="@+id/btn_vertical_scoll_vertical_confict"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="垂直嵌套垂直" />
 
-                android:id="@+id/btn_vertical_scoll_vertical_confict"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="垂直嵌套垂直" />
+                    <Button
 
-            <Button
-
-                android:id="@+id/btn_horzontal_scoll_horzontal_confict"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="水平嵌套水平" />
+                        android:id="@+id/btn_horzontal_scoll_horzontal_confict"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="水平嵌套水平" />
 
 
-        </android.support.v7.widget.GridLayout>
+                </android.support.v7.widget.GridLayout>
+            </FrameLayout>
 
-    </cn.qssq666.slidemenu.VerticalLPager>
+        </cn.qssq666.slidemenu.VerticalLPager>
+    </FrameLayout>
 </LinearLayout>

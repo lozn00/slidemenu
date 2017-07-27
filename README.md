@@ -2,6 +2,12 @@
 
 ![演示图片地址no](https://github.com/qssq/slidemenu/blob/master/Pictures/1.gif)
 
+gradle
+```
+ compile 'cn.qssq666:slidemenu:0.1'
+
+
+```
 **功能**
 
 支持水平 垂直滑动翻页 
