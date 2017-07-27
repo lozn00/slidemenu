@@ -12,7 +12,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ff00"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:tag="first">
 
             <TextView
                 style="@style/text_size_bg_tip"
@@ -24,7 +25,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:tag="second">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -43,17 +45,6 @@
                 android:text="我是VerticalLPager第二层"
                 android:textColor="@android:color/white" />
 
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="visible"
-
-
-            >
-            <!--如果加上这层，滑动的时候不动了。 一定是嵌套写的还是有毛病。-->
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view_horzontal"
@@ -97,6 +88,7 @@
 
 
             </android.support.v7.widget.RecyclerView>
+
         </FrameLayout>
 
     </cn.qssq666.slidemenu.VerticalLPager>

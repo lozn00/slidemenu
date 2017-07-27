@@ -452,7 +452,7 @@ public class VerticalLPager extends FrameLayout implements NestedScrollingParent
 
                     @Override
                     public int clampViewPositionVertical(View child, int top, int dy) {
-                        Log.i(TAG, "clampViewPositionVertical->" + top + "," + dy);
+                        Log.i(TAG, "clampViewPositionVertical->" + top + "," + dy+",child:"+child.getTag());
                         if (child == mTopView) {//不能向左边滑动只能向右边滑动 右边滑动之后就把直播展示出来了
 
                             if (top < 0) {
@@ -471,7 +471,7 @@ public class VerticalLPager extends FrameLayout implements NestedScrollingParent
                                 return top;
                             }
                         }
-                        return 0;
+                        return 0;//多了一个view
                     }
 
                     @Override
