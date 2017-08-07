@@ -14,5 +14,6 @@ public class HorzontalSrollConfictActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_horzontal_sroll_confict);
         AutoUtils.initTestVerticalData((RecyclerView) findViewById(R.id.recycler_view));
+        AutoUtils.initTestClick(findViewById(R.id.btn_click));
     }
 }

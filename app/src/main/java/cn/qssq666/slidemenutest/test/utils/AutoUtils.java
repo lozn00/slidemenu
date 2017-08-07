@@ -2,7 +2,9 @@ package cn.qssq666.slidemenutest.test.utils;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import cn.qssq666.slidemenutest.test.adapter.MyTestAadapter;
 
@@ -24,5 +26,14 @@ public class AutoUtils {
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(),orientation,false));
         recyclerView.setAdapter(new MyTestAadapter());
 
+    }
+
+    public static void initTestClick(View viewById) {
+        viewById.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "你点击了我", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

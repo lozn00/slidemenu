@@ -3,6 +3,7 @@ package cn.qssq666.slidemenu;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
@@ -16,7 +17,7 @@ import android.widget.FrameLayout;
  * 默认显示2个封面
  * 把封面往右边拖将会隐藏 隐藏之后往左边面拉又会被拉出来
  */
-public class HorizontalPager extends FrameLayout {
+public class HorizontalPager extends FrameLayout  implements NestedScrollingParent {
 
     private static final String TAG = "TwoPager";
     private float criticalVel;
@@ -78,7 +79,7 @@ public class HorizontalPager extends FrameLayout {
                         @Override
                         public int getViewHorizontalDragRange(View child)
                         {
-                            return 3;
+                            return 0;
                         }
 
                         @Override

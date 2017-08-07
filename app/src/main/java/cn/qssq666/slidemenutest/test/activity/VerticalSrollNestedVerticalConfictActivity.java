@@ -16,6 +16,8 @@ public class VerticalSrollNestedVerticalConfictActivity extends AppCompatActivit
         AutoUtils.initTestVerticalData((RecyclerView) findViewById(R.id.recycler_view));
         AutoUtils.initTestHorzontalData((RecyclerView) findViewById(R.id.recycler_view_horzontal));
         AutoUtils.initTestVerticalData((RecyclerView) findViewById(R.id.recycler_view_vertical_top));
+        AutoUtils.initTestClick(findViewById(R.id.btn_click));
     }
+    //return 0则 全屏点击view 无法滑动 设置为1则recyclerview 无法滚动。
 
 }

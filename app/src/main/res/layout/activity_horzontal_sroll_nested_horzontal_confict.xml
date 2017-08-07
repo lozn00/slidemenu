@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <cn.qssq666.slidemenu.HorizontalPager
         android:layout_width="match_parent"
@@ -32,7 +33,8 @@
 
         </FrameLayout>
 
-        <FrameLayout
+        <cn.qssq666.slidemenu.ClickLayout
+            android:id="@+id/btn_click"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#55ff0000">
@@ -65,7 +67,7 @@
 
 
             </android.support.v7.widget.RecyclerView>
-        </FrameLayout>
+        </cn.qssq666.slidemenu.ClickLayout>
 
     </cn.qssq666.slidemenu.HorizontalPager>
 </LinearLayout>

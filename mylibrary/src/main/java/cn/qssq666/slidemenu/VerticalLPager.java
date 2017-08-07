@@ -222,7 +222,7 @@ public class VerticalLPager extends FrameLayout implements NestedScrollingParent
      */
     public void onStopNestedScroll(View target) {
         Log.w(TAG, "测试模块 onStopNestedScroll");
-        if(!mDragger.continueSettling(true)){//没有在滑动中才进行调用。
+        if (!mDragger.continueSettling(true)) {//没有在滑动中才进行调用。
             if (mTopView.getTop() < mSize / 2) {//表明 往右边拉 还没拉到1半 所以回弹
                 show();
             } else {
@@ -441,18 +441,31 @@ public class VerticalLPager extends FrameLayout implements NestedScrollingParent
                     //写上垂直和水平 可以解决不能响应点击事件问题
                     @Override
                     public int getViewHorizontalDragRange(View child) {
+
                         return 0;
                     }
 
                     @Override
                     public int getViewVerticalDragRange(View child) {
-                        return 3;
+//                        int range = getMeasuredWidth() - child.getMeasuredWidth();
+                        return 0;//如果是1就导致recyclerview冲突了。
+
+//                        return 1;
+                        /*if (child == mTopView) {
+                            boolean enableTopScroll = ViewUtils.canChildScrollDown(child);//是否能往上拉 也就是往上滚动
+                            boolean enableBottomcroll = ViewUtils.canChildScrollUp(child);//是否能往上拉 也就是往上滚动
+                            return enableTopScroll ? 0 : 1;
+
+                        } else {
+                            boolean enableBottomScroll = ViewUtils.canChildScrollUp(child);//是否能往上拉 也就是往上滚动
+                            return enableBottomScroll ? 0 : 1;
+                        }*/
                     }
 
 
                     @Override
                     public int clampViewPositionVertical(View child, int top, int dy) {
-                        Log.i(TAG, "clampViewPositionVertical->" + top + "," + dy+",child:"+child.getTag());
+                        Log.i(TAG, "clampViewPositionVertical->" + top + "," + dy + ",child:" + child.getTag());
                         if (child == mTopView) {//不能向左边滑动只能向右边滑动 右边滑动之后就把直播展示出来了
 
                             if (top < 0) {
@@ -542,10 +555,16 @@ public class VerticalLPager extends FrameLayout implements NestedScrollingParent
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-/*        boolean onInterceptTouchEvent = super.onInterceptTouchEvent(event);
+
+        /*        boolean onInterceptTouchEvent = super.onInterceptTouchEvent(event);
         Log.w(TAG,"onInterceptTouchEvent:"+onInterceptTouchEvent);
         return onInterceptTouchEvent;*/
 
+        /*final int action = MotionEventCompat.getActionMasked(event);
+        if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+            mDragger.cancel();
+            return false;
+        }*/
 
         if (mDragger.shouldInterceptTouchEvent(event)) {
             Log.i(TAG, "拦截了,");
@@ -574,7 +593,8 @@ public class VerticalLPager extends FrameLayout implements NestedScrollingParent
         } else {
             Log.i(TAG, "onInterceptTouchEvent 交给子类处理了.并没有拦截");
 //            return allowVerticalScroll(event);
-            return super.onInterceptTouchEvent(event);
+//            return super.onInterceptTouchEvent(event);
+            return false;
         }
 
     }
@@ -629,7 +649,7 @@ public class VerticalLPager extends FrameLayout implements NestedScrollingParent
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.w(TAG, "onTouchEvent");
-        if(BuildConfig.DEBUG){
+        if (BuildConfig.DEBUG) {
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:

@@ -17,19 +17,27 @@
 
                 android:layout_height="wrap_content" />
         </FrameLayout>
-
-        <TextView
-
-            android:layout_gravity="right"
-            android:layout_marginTop="50dp"
-            android:layout_marginBottom="50dp"
-            android:background="#ff0"
+        <cn.qssq666.slidemenu.ClickLayout
             android:id="@+id/btn_click"
             android:layout_width="match_parent"
-            android:textColor="@color/colorAccent"
-            android:text="我是第二页 请左右滑动翻页"
-            android:gravity="center"
-            android:layout_height="match_parent"></TextView>
+            android:layout_height="match_parent">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_marginBottom="50dp"
+
+                android:layout_marginTop="50dp"
+                android:background="#ff0"
+                android:gravity="center"
+                android:text="我是第二页 请左右滑动翻页"
+                android:textColor="@color/colorAccent"></TextView>
+
+
+        </cn.qssq666.slidemenu.ClickLayout>
+
 
     </cn.qssq666.slidemenu.HorizontalPager>
 </LinearLayout>

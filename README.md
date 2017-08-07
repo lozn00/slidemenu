@@ -8,7 +8,7 @@
 
 gradle
 ```
- compile 'cn.qssq666:slidemenu:0.1'
+ compile 'cn.qssq666:slidemenu:0.2'
 
 
 ```
@@ -73,6 +73,23 @@ demo有很多菜单演示。
 
 目前verticalPage是已经完美了的，至于菜单关闭还是没关闭的回调功能因为新加了嵌套滑动 ，所以这里还没弄 ，另外水平的也是 。
 目前支持嵌套不需要松手的平滑滑动 和加速度  ，触摸在recyclerview,当recyclerview不可以滑动的时候 那么 见证奇迹的时候到了 ，该 menu滑动了。
+
+**点击事件问题**
+
+
+getViewHorizontalDragRange(View child)返回0 则当点击事件view作为全屏view的时候全部被它强行占有,当返回>0的时候和recyclerview冲突，
+我没有什么解决方法，只能推荐朋友用这种方法解决这个问题了。
+```
+     getFavorLayout().setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        addFavor();
+                    }
+                    return false;
+                }
+            });
+```
 
 
 **疑问**

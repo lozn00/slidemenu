@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <cn.qssq666.slidemenu.VerticalLPager
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <FrameLayout
-            android:background="#f00"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="#f00">
+
             <TextView
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@android:color/white"
                 android:text="我是封面"
 
-                android:layout_height="wrap_content" />
+                android:textColor="@android:color/white" />
         </FrameLayout>
 
-        <TextView
+        <cn.qssq666.slidemenu.ClickLayout
             android:id="@+id/btn_click"
-            android:text="请拖动我啥给你下滑动"
-            android:gravity="center"
-
-            android:layout_gravity="bottom"
-            android:background="#ff0"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></TextView>
+            android:layout_height="match_parent">
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:background="#ff0"
+
+                android:gravity="center"
+                android:text="请拖动我啥给你下滑动"></TextView>
+        </cn.qssq666.slidemenu.ClickLayout>
+
 
     </cn.qssq666.slidemenu.VerticalLPager>
 </LinearLayout>

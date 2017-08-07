@@ -23,7 +23,8 @@
                 android:text="VerticalLPager第一层" />
         </FrameLayout>
 
-        <FrameLayout
+        <cn.qssq666.slidemenu.ClickLayout
+            android:id="@+id/btn_click"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:tag="second">
@@ -89,7 +90,7 @@
 
             </android.support.v7.widget.RecyclerView>
 
-        </FrameLayout>
+        </cn.qssq666.slidemenu.ClickLayout>
 
     </cn.qssq666.slidemenu.VerticalLPager>
 </FrameLayout>

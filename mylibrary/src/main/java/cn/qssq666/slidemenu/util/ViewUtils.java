@@ -1,6 +1,7 @@
 package cn.qssq666.slidemenu.util;
 
 import android.support.v4.view.ViewCompat;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
 
@@ -11,6 +12,7 @@ import android.widget.AbsListView;
 public class ViewUtils {
     /**
      * 是否到底部了 能否上拉
+     *
      * @param view
      * @return
      */
@@ -52,6 +54,7 @@ public class ViewUtils {
 
     /**
      * 是否手指能往上滾 也就是 內部是否能往下滾
+     *
      * @param view
      * @return
      */
@@ -76,5 +79,43 @@ public class ViewUtils {
         } else {
             return ViewCompat.canScrollVertically(view, 1);
         }
+    }
+
+
+    public static boolean canChildScrollRight(View view) {
+        if (android.os.Build.VERSION.SDK_INT < 14) {
+            return true;
+        } else {
+            return ViewCompat.canScrollVertically(view, 1);
+        }
+    }
+
+
+    public static boolean canChildScrollLeft(View view) {
+        if (android.os.Build.VERSION.SDK_INT < 14) {
+            return true;
+        } else {
+            return ViewCompat.canScrollVertically(view, -1);
+        }
+    }
+
+    /**
+     * 放在 dispatchTouchEvent 如果返回true那就直接返回 false。
+     *
+     * @param event
+     * @return
+     */
+    public static boolean doAtClickLayoutIsNeedCancel(MotionEvent event) {
+        int action = event.getAction();
+        if (action == MotionEvent.ACTION_MOVE) {
+            return true;
+        }
+        switch (action) {
+            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_CANCEL:
+                return true;
+
+        }
+        return false;
     }
 }
