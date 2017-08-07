@@ -78,13 +78,13 @@ public class HorizontalPager extends FrameLayout {
                         @Override
                         public int getViewHorizontalDragRange(View child)
                         {
-                            return getMeasuredWidth()-child.getMeasuredWidth();
+                            return 3;
                         }
 
                         @Override
                         public int getViewVerticalDragRange(View child)
                         {
-                            return getMeasuredHeight()-child.getMeasuredHeight();
+                            return 0;
                         }
 
                     @Override

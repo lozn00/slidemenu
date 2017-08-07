@@ -19,6 +19,7 @@
         </FrameLayout>
 
         <TextView
+            android:id="@+id/btn_click"
             android:text="请拖动我啥给你下滑动"
             android:gravity="center"
 

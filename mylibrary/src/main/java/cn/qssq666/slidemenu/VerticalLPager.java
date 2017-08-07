@@ -441,12 +441,12 @@ public class VerticalLPager extends FrameLayout implements NestedScrollingParent
                     //写上垂直和水平 可以解决不能响应点击事件问题
                     @Override
                     public int getViewHorizontalDragRange(View child) {
-                        return getMeasuredWidth() - child.getMeasuredWidth();
+                        return 0;
                     }
 
                     @Override
                     public int getViewVerticalDragRange(View child) {
-                        return getMeasuredHeight() - child.getMeasuredHeight();
+                        return 3;
                     }
 
 
